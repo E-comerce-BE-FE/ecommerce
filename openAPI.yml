@@ -1,0 +1,363 @@
+openapi: 3.0.3
+info:
+  title: E - Commerce
+  description: This is API for Group Project By Alterra Academy
+  version: "1.0.0"
+  contact:
+    email: fauzilax@gmail.com
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+tags:
+  - name: register
+    description: Endpoint for user registration
+  - name: login
+    description: Endpoint for verifying who a user is
+  - name: logout
+  - name: search
+    description: Endpoint for find users
+  - name: users
+    description: Endpoint for perform operations on user
+  - name: Product
+    description: Endpoint to perform operations on user posts
+  - name: Cart
+    description: Endpoint for perform operations on cart
+  - name: Transaction
+    description: Endpoint to perform operations on comment
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/fauzilax/E-Commerce/1.0.0
+  - url: https://shirayuki.site
+    description: primarry link
+
+paths:
+  /register:
+    post:
+      tags:
+        - register
+      description: feature for user registration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                phone:  
+                  type: string
+                password:
+                  type: string
+                  format: password
+            example:
+              name: "Fauzi Sofyan"
+              email: "fauzilax@gmail.com"
+              phone: "0813456"
+              password: "123"
+      responses:
+        201: 
+          description: "success insert data"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Success create account"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+
+  /login:
+    post:
+      tags:
+        - "login"
+      summary: login account
+      description: feature for verifying who a user is
+      security:
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: 
+                  type: string
+                password:
+                  type: string
+                  format: password
+              example: 
+                email: "fauzilax@gmail.com"
+                password: "123"
+      responses:
+        200:
+          description: "success login"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseObject'
+              example:
+                data: 
+                  id: 1
+                  name: "Fauzi Sofyan"
+                  email: "fauzilax@gmail.com"
+                  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJ1c2VySUQiOjR9.QTZxERh4CwC_UnL_eJvTi_A_qdLeBZ-IjR4nqoxjodk"
+                message: "login success"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+          
+  /logout:
+    get:
+      tags: 
+        - logout
+      summary: logout account
+      description: Logout profile
+      security: 
+        - JWTAuth: []
+      responses:
+        200:
+          description: "success logout"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/responseObject'
+              example:
+                message: "logout success"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+    
+  /users:
+    put:
+      tags:
+        - users
+      summary: update profile
+      description: Update user profile
+      security:
+        - JWTAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                phone:  
+                  type: string
+                address:  
+                  type: string
+                password:
+                  type: string
+                  format: password
+            example: 
+              name: "Griffin"
+              email: "griffin@gmail.com"
+              phone: "08123456"
+              address: "Makassar"
+              password: "123"
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+            example:
+              image: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673881607/go-cloudinary/llhltxp55elirjkmlyld.png"
+      responses:
+        200:
+          description: update success
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  id : 2
+                  name: "Griffin"
+                  email: "griffin@gmail.com"
+                  phone: "08123456"
+                  address: "Makassar"
+                  password: "123"
+                  image: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673881607/go-cloudinary/llhltxp55elirjkmlyld.png"
+                message: "update profile success"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+
+    delete:
+      tags:
+        - users
+      summary: delete data user
+      description: delete data from user
+      security:
+        - JWTAuth: []
+      responses:
+        200:
+          description: deleted user success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: "delete data user success"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+
+    get:
+      tags: 
+        - users
+      summary: get data user by id user
+      description: getting data user by id user
+      security: 
+        - JWTAuth: []
+      responses:
+        200:
+          description: success show profile
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 1
+                    bio: "Hello my name Alfian Aditya"
+                    username: "alfian2316"
+                    profilepicture: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673881607/go-cloudinary/llhltxp55elirjkmlyld.png"
+                    product: [{
+                      product_id: 1,
+                      content: "This morning I make good scramble egg for breakfast. Yumm!",
+                      image: "https://sosmedgroup2.s3.amazonaws.com/2023-01-16%2006%3A40%3A47.jpg",
+                      create_at: "2023-01-16 13:56:42",
+                      username: "alfian2316",
+                      profilepicture: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673881607/go-cloudinary/llhltxp55elirjkmlyld.png",
+                      comments: 3
+                      },
+                      {
+                      id: 2,
+                      content: "Good coffe = Good mood!",
+                      image: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673892611/go-cloudinary/gxjitapwl7pjcgskb3ph.jpg",
+                      create_at: "2023-01-16 15:30:42",
+                      username: "alfian2316",
+                      profilepicture: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673892611/go-cloudinary/gxjitapwl7pjcgskb3ph.jpg",
+                      comments: 3
+                      }]
+                  message: "success show profile"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+          
+  /product:
+    post:
+      tags:
+        - product
+      description: feature for user create new product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_name:
+                  type: string
+                stock:  
+                  type: string
+                price:
+                  type: string
+                description:
+                  type: string
+                product_image:
+                  type: string
+            example:
+              product_name: "Pepsodent"
+              stock: 30
+              price: 12000
+              description: "Pasta gigi yang mengandung bahan mint membuat mulut lebih fresh dan merawat gigi lebih maximal dengan kandungan mint yang sangat baik"
+              product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg"
+              
+      responses:
+        201: 
+          description: "success insert product"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Success create account"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+  
+
+components:
+  securitySchemes:
+    JWTAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "user token"
+  schemas:
+    responseObject:
+      type: object
+      properties:
+        data:
+          type: object
+        message:
+          type: string
+    responseObjectArr:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+        message:
+          type: string
+  responses:
+    400:
+      description: "error from user"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          example:
+            message: "Bad request"
+    500:
+      description: "error from server"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+          example:
+            message: "Internal server error"
