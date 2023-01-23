@@ -18,12 +18,12 @@ tags:
     description: Endpoint for find users
   - name: users
     description: Endpoint for perform operations on user
-  - name: Product
-    description: Endpoint to perform operations on user posts
-  - name: Cart
+  - name: products
+    description: Endpoint to perform operations on user product
+  - name: carts
     description: Endpoint for perform operations on cart
-  - name: Transaction
-    description: Endpoint to perform operations on comment
+  - name: transactions
+    description: Endpoint to perform operations on transaction
 servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
@@ -81,8 +81,6 @@ paths:
         - "login"
       summary: login account
       description: feature for verifying who a user is
-      security:
-        - JWTAuth: []
       requestBody:
         required: true
         content:
@@ -140,6 +138,47 @@ paths:
           $ref: '#/components/responses/500'
     
   /users:
+    get:
+      tags: 
+        - users
+      summary: get data user by id user
+      description: getting data user by id user
+      security: 
+        - JWTAuth: []
+      responses:
+        200:
+          description: success show profile
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 2
+                    name: "Griffin"
+                    profilepicture: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673881607/go-cloudinary/llhltxp55elirjkmlyld.png"
+                    product: [{
+                      product_id: 1,
+                      product_name: "Pepsodent",
+                      stock: 30,
+                      price: 12000,
+                      description: "Pasta gigi yang mengandung bahan mint membuat mulut lebih fresh dan merawat gigi lebih maximal dengan kandungan mint yang sangat baik",
+                      product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/lifebuoy_lifebuoy-sabun-batangan_full02.jpg"
+                      },
+                      {
+                      product_id: 2,
+                      product_name: "Lifeboy",
+                      stock: 20,
+                      price: 10000,
+                      description: "Sabun lifeboy dapat memberikan kulit menjadi lebih cerah dan lembut",
+                      product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg"
+                      }]
+                  message: "success show profile"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+
     put:
       tags:
         - users
@@ -223,56 +262,14 @@ paths:
           $ref: '#/components/responses/400'
         500:
           $ref: '#/components/responses/500'
-
-    get:
-      tags: 
-        - users
-      summary: get data user by id user
-      description: getting data user by id user
-      security: 
-        - JWTAuth: []
-      responses:
-        200:
-          description: success show profile
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  data:
-                    id: 1
-                    bio: "Hello my name Alfian Aditya"
-                    username: "alfian2316"
-                    profilepicture: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673881607/go-cloudinary/llhltxp55elirjkmlyld.png"
-                    product: [{
-                      product_id: 1,
-                      content: "This morning I make good scramble egg for breakfast. Yumm!",
-                      image: "https://sosmedgroup2.s3.amazonaws.com/2023-01-16%2006%3A40%3A47.jpg",
-                      create_at: "2023-01-16 13:56:42",
-                      username: "alfian2316",
-                      profilepicture: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673881607/go-cloudinary/llhltxp55elirjkmlyld.png",
-                      comments: 3
-                      },
-                      {
-                      id: 2,
-                      content: "Good coffe = Good mood!",
-                      image: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673892611/go-cloudinary/gxjitapwl7pjcgskb3ph.jpg",
-                      create_at: "2023-01-16 15:30:42",
-                      username: "alfian2316",
-                      profilepicture: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673892611/go-cloudinary/gxjitapwl7pjcgskb3ph.jpg",
-                      comments: 3
-                      }]
-                  message: "success show profile"
-        400:
-          $ref: '#/components/responses/400'
-        500:
-          $ref: '#/components/responses/500'
           
-  /product:
+  /products:
     post:
       tags:
-        - product
+        - products
       description: feature for user create new product
+      security:
+        - JWTAuth: []
       requestBody:
         content:
           application/json:
@@ -312,7 +309,385 @@ paths:
           $ref: '#/components/responses/400'
         500:
           $ref: '#/components/responses/500'
+    get:
+      tags:
+        - products
+      summary: show homepage
+      description: feature for show all product in homepage
+      responses:
+        200:
+          description: success show all product
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data: [{
+                    id: 1,
+                    product_name: "Pepsodent",
+                    address: "Makassar",
+                    price: 12000,
+                    product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg",
+                    },
+                    {
+                    id: 2,
+                    product_name: "Lifeboy",
+                    address: "Makassar",
+                    price: 10000,
+                    product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg",
+                    }]
+                  message: "success show all product"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
   
+  /products/{product_id}:
+    get:
+      tags:
+        - products
+      summary: show detail product
+      description: feature for show detail product
+      responses:
+        200:
+          description: success show product
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 1
+                    product_name: "Pepsodent"
+                    address: "Makassar"
+                    price: 12000,
+                    product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg"
+                    user: {
+                      user_id: 2,
+                      name: "Griffin",
+                      address: "Makassar",
+                      profilepicture: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673881607/go-cloudinary/llhltxp55elirjkmlyld.png"
+                    }
+    put:
+      tags:
+        - products
+      description: feature for user create new product
+      security:
+        - JWTAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_name:
+                  type: string
+                stock:  
+                  type: string
+                price:
+                  type: string
+                description:
+                  type: string
+                product_image:
+                  type: string
+            example:
+              product_name: "Cheetos"
+              stock: 50
+              price: 5000
+              description: "Dengan rasa jagung alami membuat makanan menjadi gurih dan enak untuk dinikmati"
+              product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/53264112-73f6-4da4-8cd2-dcdab668dfb9.jpg"
+      responses:
+        200:
+          description: update success
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  product_name: "Cheetos"
+                  stock: 50
+                  price: 5000
+                  description: "Dengan rasa jagung alami membuat makanan menjadi gurih dan enak untuk dinikmati"
+                  product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/53264112-73f6-4da4-8cd2-dcdab668dfb9.jpg"
+                message: "update product success"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - products
+      description: delete from product
+      security:
+        - JWTAuth: []
+      responses:
+        200:
+          description: deleted product success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: "delete product success"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+
+  /carts/{product_id}:
+    post:
+      tags:
+        - carts
+      description: feature for user create new cart
+      security:
+        - JWTAuth: []
+      responses:
+        201: 
+          description: "success added to cart"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Success added"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+    
+  /carts:
+    get:
+      tags:
+        - carts
+      description: feature for user create new cart
+      security:
+        - JWTAuth: []
+      responses:
+        200:
+          description: update success
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data: [{
+                  id: 1,
+                  product_name: "Pepsodent",
+                  seller: "Griffin",
+                  quantity: 3,
+                  amount: 12000,
+                  product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg",
+                  },
+                  {
+                  id: 2,
+                  product_name: "Lifeboy",
+                  seller: "Griffin",
+                  quantity: 2,
+                  amount: 10000,
+                  product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg",
+                  }]
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+    
+  /carts/{cart_id}:
+    put:
+      tags:
+        - carts
+      description: feature for user update qty product
+      security:
+        - JWTAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                update_qty:
+                  type: integer
+      responses:
+        200:
+          description: update success
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                message: update quantity succes
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+    
+    delete:
+      tags:
+        - carts
+      description: feature for user delete product from cart
+      security:
+        - JWTAuth: []
+      responses:
+        200:
+          description: deleted cart success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: "delete cart success"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+
+  /transactions:
+    post:
+      tags:
+        - transactions
+      description: feature for user create new cart
+      security:
+        - JWTAuth: []
+      responses:
+        201: 
+          description: "success added transaction"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                data:
+                  id: 1
+                  user_id: 2
+                  total_product: 5
+                  total_amount: 56000
+                  status: "pending"
+                  create_at: "23-01-2023 22:10:15"
+                  transaction_code: "isj82j1wd"
+                message: "Success added"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+
+    get:
+      tags:
+        - transactions
+      description: feature for user create new cart
+      security:
+        - JWTAuth: []
+      responses:
+        200: 
+          description: "success show transaction"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                data: [{
+                  id: 1,
+                  user_id: 2,
+                  total_product: 5,
+                  subtotal: 56000,
+                  status: "pending",
+                  create_at: "23-01-2023 22:10:15",
+                  transaction_code: "isj82j1wd",
+                  },
+                  {
+                  id: 2,
+                  user_id: 2,
+                  total_product: 10,
+                  subtotal: 100000,
+                  status: "success",
+                  create_at: "23-01-2023 22:10:15",
+                  transaction_code: "isj82j1wd",
+                  },
+                  {
+                  id: 3,
+                  user_id: 2,
+                  total_product: 5,
+                  subtotal: 60000,
+                  status: "cancelled",
+                  create_at: "23-01-2023 22:10:15",
+                  transaction_code: "isj82j1wd",
+                  }]
+                message: "Success added"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+
+  /transactions/{transation_id}:
+    get:
+      tags:
+        - transactions
+      summary: show detail transaction
+      description: feature for show detail transactions
+      security:
+        - JWTAuth: []
+      responses:
+        200: 
+          description: "success show transaction"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                data: [{
+                  transaction_id: 1,
+                  product_name: "Pepsodent",
+                  seller: "Griffin",
+                  quantity: 3,
+                  amount: 36000,
+                  product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg",
+                  },
+                  {
+                  transaction_id: 1,
+                  product_name: "Lifeboy",
+                  seller: "Griffin",
+                  quantity: 2,
+                  amount: 20000,
+                  product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg",
+                  }]
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+
+    put:
+      tags:
+        - transactions
+      summary: midtrans process
+      description: feature for update transaction status
+      security:
+        - JWTAuth: []
+      responses:
+        200: 
+          description: "success update transaction status"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                data:
+                  transaction_status: success
+                message: "Update transaction status success"
+
 
 components:
   securitySchemes:
