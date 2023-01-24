@@ -56,7 +56,7 @@ func (uc *userControll) Profile() echo.HandlerFunc {
 			return c.JSON(PrintErrorResponse(err.Error()))
 		}
 
-		return c.JSON(PrintSuccessReponse(http.StatusOK, "success show profile", PPToResponse(res)))
+		return c.JSON(PrintSuccessReponse(http.StatusOK, "success show profile", res))
 	}
 }
 
@@ -79,7 +79,7 @@ func (uc *userControll) Update() echo.HandlerFunc {
 			return c.JSON(PrintErrorResponse(err.Error()))
 		}
 
-		return c.JSON(PrintSuccessReponse(http.StatusOK, "success update profile", PPToResponse(res)))
+		return c.JSON(PrintSuccessReponse(http.StatusOK, "success update profile", ToResponseUpd(res)))
 	}
 }
 
