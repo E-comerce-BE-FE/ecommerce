@@ -36,7 +36,7 @@ type UploadResult struct {
 }
 
 // Helper
-func UploadToS3(c echo.Context, fileName string, src multipart.File) (string, error) {
+func UploadToS3(fileName string, src multipart.File) (string, error) {
 	// The session the S3 Uploader will use
 	sess := GetSession()
 	// Create an uploader with the session and default options
@@ -70,7 +70,7 @@ func UploadController(c echo.Context) error {
 		return err
 	}
 	defer src.Close()
-	uploadURL, err := UploadToS3(c, file.Filename, src)
+	uploadURL, err := UploadToS3(file.Filename, src)
 	if err != nil {
 		return err
 	}
