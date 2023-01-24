@@ -39,3 +39,5 @@ type UserData interface {
 	Update(id uint, updateData Core) (Core, error)
 	Delete(id uint) error
 }
+
+//
