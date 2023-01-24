@@ -2,8 +2,8 @@ package handler
 
 import (
 	"ecommerce/features/product"
-	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -31,6 +31,9 @@ func (hc *handlerController) AddProduct() echo.HandlerFunc {
 		// return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "wrong input format"})
 		//proses cek ada gambar atau tidak
 		checkFile, _, _ := c.Request().FormFile("file")
+		// //debugging
+		// log.Println(checkFile)
+		// return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "Select a file to upload"})
 		//cek file kalau ada isi nya
 		if checkFile != nil {
 			formHeader, err := c.FormFile("file")
@@ -49,10 +52,10 @@ func (hc *handlerController) AddProduct() echo.HandlerFunc {
 				return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
 			}
 		}
-		log.Println(res)
+		// log.Println(res)
 		return c.JSON(http.StatusCreated, map[string]interface{}{
-			// "data":    res,
-			"message": "success create content",
+			"data":    res,
+			"message": "success add product",
 		})
 	}
 }
@@ -77,15 +80,78 @@ func (hc *handlerController) AllProduct() echo.HandlerFunc {
 
 // Delete implements product.ProductHandler
 func (hc *handlerController) Delete() echo.HandlerFunc {
-	panic("unimplemented")
+	return func(c echo.Context) error {
+		prdID := c.Param("id")
+		productID, _ := strconv.Atoi(prdID)
+		err := hc.srv.Delete(c.Get("user"), uint(productID))
+		if err != nil {
+			if strings.Contains(err.Error(), "not") {
+				return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "you are not allowed delete other people product"})
+			} else {
+				return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error, deleting product fail"})
+			}
+		}
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "success delete product",
+		})
+	}
 }
 
 // EditProduct implements product.ProductHandler
 func (hc *handlerController) EditProduct() echo.HandlerFunc {
-	panic("unimplemented")
+	return func(c echo.Context) error {
+		prdID := c.Param("id")
+		productID, _ := strconv.Atoi(prdID)
+		input := EditProductRequest{}
+		err := c.Bind(&input)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "wrong input format"})
+		}
+		// log.Println(input.FileHeader)
+		// return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "wrong input format"})
+		//proses cek ada gambar atau tidak
+		checkFile, _, _ := c.Request().FormFile("file")
+		// Debugging
+		// log.Println(checkFile)
+		// return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "Select a file to upload"})
+		//cek file kalau ada isi nya
+		if checkFile != nil {
+			formHeader, err := c.FormFile("file")
+			if err != nil {
+				return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "Select a file to upload"})
+			}
+			input.FileHeader = *formHeader
+		}
+		res, err := hc.srv.EditProduct(c.Get("user"), input.FileHeader, uint(productID), *RequestToCore(input))
+		if err != nil {
+			if strings.Contains(err.Error(), "type") {
+				return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "only jpg or png file can be insert"})
+			} else if strings.Contains(err.Error(), "size") {
+				return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "max file size is 500KB"})
+			} else {
+				return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
+			}
+		}
+		// log.Println(res)
+		return c.JSON(http.StatusCreated, map[string]interface{}{
+			"data":    res,
+			"message": "success change product data",
+		})
+	}
 }
 
 // ProductDetail implements product.ProductHandler
 func (hc *handlerController) ProductDetail() echo.HandlerFunc {
-	panic("unimplemented")
+	return func(c echo.Context) error {
+		prdID := c.Param("id")
+		productID, _ := strconv.Atoi(prdID)
+		res, err := hc.srv.ProductDetail(uint(productID))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
+		}
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"data":    res,
+			"message": "success",
+		})
+	}
 }

@@ -28,7 +28,7 @@ func main() {
 
 	pData := prdData.New(db)
 	pSrv := prdSrv.New(pData)
-	pHDL := prdHdl.New((pSrv))
+	pHdl := prdHdl.New((pSrv))
 
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.CORS())
@@ -44,7 +44,12 @@ func main() {
 	e.GET("/users", uHdl.Profile(), middleware.JWT([]byte(config.JWTKey)))
 
 	// Product
-	e.GET("/product", pHDL.AllProduct())
+	e.POST("/products", pHdl.AddProduct(), middleware.JWT([]byte(config.JWTKey)))
+	e.GET("/products", pHdl.AllProduct())
+	e.GET("/products/:id", pHdl.ProductDetail())
+	e.PUT("/products/:id", pHdl.EditProduct(), middleware.JWT([]byte(config.JWTKey)))
+	e.DELETE("/products/:id", pHdl.Delete(), middleware.JWT([]byte(config.JWTKey)))
+
 	// ========== Run Program ===========
 	if err := e.Start(":8000"); err != nil {
 		log.Println(err.Error())
