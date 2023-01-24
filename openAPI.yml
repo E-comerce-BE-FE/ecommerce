@@ -114,28 +114,6 @@ paths:
           $ref: '#/components/responses/400'
         500:
           $ref: '#/components/responses/500'
-          
-  /logout:
-    get:
-      tags: 
-        - logout
-      summary: logout account
-      description: Logout profile
-      security: 
-        - JWTAuth: []
-      responses:
-        200:
-          description: "success logout"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/responseObject'
-              example:
-                message: "logout success"
-        400:
-          $ref: '#/components/responses/400'
-        500:
-          $ref: '#/components/responses/500'
     
   /users:
     get:
@@ -284,8 +262,13 @@ paths:
                   type: string
                 description:
                   type: string
-                product_image:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
                   type: string
+                  format: binary
             example:
               product_name: "Pepsodent"
               stock: 30
@@ -404,8 +387,13 @@ paths:
                   type: string
                 description:
                   type: string
-                product_image:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
                   type: string
+                  format: binary
             example:
               product_name: "Cheetos"
               stock: 50
@@ -522,6 +510,7 @@ paths:
                   amount: 10000,
                   product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg",
                   }]
+                message: "Success show cart"
         400:
           $ref: '#/components/responses/400'
         500:
