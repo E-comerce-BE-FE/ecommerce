@@ -12,6 +12,7 @@ type Core struct {
 	ProductImage string
 	Price        int
 	Stock        int
+	Description  string
 	User         UserCore
 }
 
