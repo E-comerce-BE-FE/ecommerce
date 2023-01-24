@@ -30,15 +30,20 @@ func (uq *userQuery) Login(email string) (user.Core, error) {
 }
 
 func (uq *userQuery) Register(newUser user.Core) (user.Core, error) {
-	cnv := CoreToData(newUser)
-	err := uq.db.Create(&cnv).Error
+	dupEmail := CoreToData(newUser)
+	err := uq.db.Where("email = ?", newUser.Email).First(&dupEmail).Error
+	if err == nil {
+		log.Println("duplicated")
+		return user.Core{}, errors.New("email duplicated")
+	}
 
+	cnv := CoreToData(newUser)
+	err = uq.db.Create(&cnv).Error
 	if err != nil {
 		return user.Core{}, err
 	}
 
 	newUser.ID = cnv.ID
-	newUser.Password = ""
 	return newUser, nil
 }
 
