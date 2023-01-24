@@ -349,7 +349,7 @@ paths:
                   data:
                     id: 1
                     product_name: "Pepsodent"
-                    address: "Makassar"
+                    stock: 30
                     price: 12000,
                     product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg"
                     user: {
@@ -361,7 +361,7 @@ paths:
     put:
       tags:
         - products
-      description: feature for user create new product
+      description: feature for user update product
       security:
         - JWTAuth: []
       parameters:

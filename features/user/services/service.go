@@ -79,7 +79,7 @@ func (uuc *userUseCase) Profile(token interface{}) (user.Core, error) {
 		return user.Core{}, errors.New("data not found")
 	}
 
-	res, err := uuc.qry.Profile(uint(id))
+	res, err := uuc.qry.Profile()
 	if err != nil {
 		msg := ""
 		if strings.Contains(err.Error(), "not found") {

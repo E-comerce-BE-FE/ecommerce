@@ -47,10 +47,10 @@ func (uq *userQuery) Register(newUser user.Core) (user.Core, error) {
 	return newUser, nil
 }
 
-func (uq *userQuery) Profile(id uint) (user.Core, error) {
+func (uq *userQuery) Profile() (user.Core, error) {
 	res := User{}
 
-	if err := uq.db.Where("id = ?", id).First(&res).Error; err != nil {
+	if err := uq.db.Preload("Product").Find(&res).Error; err != nil {
 		log.Println("Get By ID query error", err.Error())
 		return user.Core{}, err
 	}
