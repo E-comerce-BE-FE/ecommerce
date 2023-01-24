@@ -47,7 +47,7 @@ func (uq *userQuery) Register(newUser user.Core) (user.Core, error) {
 	return newUser, nil
 }
 
-func (uq *userQuery) Profile() (user.Core, error) {
+func (uq *userQuery) Profile() (interface{}, error) {
 	res := User{}
 
 	if err := uq.db.Preload("Product").Find(&res).Error; err != nil {
@@ -55,7 +55,7 @@ func (uq *userQuery) Profile() (user.Core, error) {
 		return user.Core{}, err
 	}
 
-	return ToCore(res), nil
+	return res, nil
 }
 
 func (uq *userQuery) Update(id uint, updateData user.Core) (user.Core, error) {

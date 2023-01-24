@@ -1,6 +1,7 @@
 package data
 
 import (
+	"ecommerce/features/product/data"
 	"ecommerce/features/user"
 
 	"gorm.io/gorm"
@@ -14,16 +15,7 @@ type User struct {
 	Address        string
 	Password       string
 	Profilepicture string
-	Product        Product
-}
-
-type Product struct {
-	gorm.Model
-	ProductName  string
-	ProductImage string
-	Stock        int
-	Price        int
-	Description  string
+	Product        []data.Product
 }
 
 func ToCore(data User) user.Core {
