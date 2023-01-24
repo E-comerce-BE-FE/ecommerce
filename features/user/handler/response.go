@@ -29,7 +29,7 @@ type UpdateUserResp struct {
 	Profilepicture string `json:"profilepicture"`
 }
 
-func PPToResponse(data user.Core) UpdateUserResp {
+func ToResponseUpd(data user.Core) UpdateUserResp {
 	return UpdateUserResp{
 		Name:           data.Name,
 		Email:          data.Email,

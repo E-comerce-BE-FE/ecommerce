@@ -27,7 +27,7 @@ type UserHandler interface {
 type UserService interface {
 	Login(email, password string) (string, Core, error)
 	Register(newUser Core) (Core, error)
-	Profile(token interface{}) (Core, error)
+	Profile(token interface{}) (interface{}, error)
 	Update(token interface{}, fileData multipart.FileHeader, updateData Core) (Core, error)
 	Delete(token interface{}) error
 }
@@ -35,7 +35,7 @@ type UserService interface {
 type UserData interface {
 	Login(email string) (Core, error)
 	Register(newUser Core) (Core, error)
-	Profile(id uint) (Core, error)
+	Profile() (interface{}, error)
 	Update(id uint, updateData Core) (Core, error)
 	Delete(id uint) error
 }
