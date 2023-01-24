@@ -98,7 +98,7 @@ func (pq *productQry) EditProduct(userID uint, productID uint, editedProduct pro
 // ProductDetail implements product.ProductData
 func (pq *productQry) ProductDetail(productID uint) (product.Core, error) {
 	data := Product{}
-	err := pq.db.Preload("User").Find(&data).Error
+	err := pq.db.Where("id = ?", productID).Preload("User").First(&data).Error
 	if err != nil {
 		log.Println("query error", err.Error())
 		return product.Core{}, errors.New("server error")
