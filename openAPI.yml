@@ -13,7 +13,6 @@ tags:
     description: Endpoint for user registration
   - name: login
     description: Endpoint for verifying who a user is
-  - name: logout
   - name: search
     description: Endpoint for find users
   - name: users
