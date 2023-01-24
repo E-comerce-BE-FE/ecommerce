@@ -348,6 +348,14 @@ paths:
         - products
       summary: show detail product
       description: feature for show detail product
+      parameters:
+        - name: product_id
+          description: product_id
+          required: true
+          in: path
+          schema:
+            type: string
+            example: 1
       responses:
         200:
           description: success show product
@@ -374,6 +382,14 @@ paths:
       description: feature for user create new product
       security:
         - JWTAuth: []
+      parameters:
+        - name: product_id
+          description: product_id
+          required: true
+          in: path
+          schema:
+            type: string
+            example: 1
       requestBody:
         content:
           application/json:
@@ -421,6 +437,14 @@ paths:
       description: delete from product
       security:
         - JWTAuth: []
+      parameters:
+        - name: product_id
+          description: product_id
+          required: true
+          in: path
+          schema:
+            type: string
+            example: 1
       responses:
         200:
           description: deleted product success
@@ -442,6 +466,14 @@ paths:
       description: feature for user create new cart
       security:
         - JWTAuth: []
+      parameters:
+        - name: product_id
+          description: product_id
+          required: true
+          in: path
+          schema:
+            type: string
+            example: 1
       responses:
         201: 
           description: "success added to cart"
@@ -502,6 +534,14 @@ paths:
       description: feature for user update qty product
       security:
         - JWTAuth: []
+      parameters:
+        - name: cart_id
+          description: cart_id
+          required: true
+          in: path
+          schema:
+            type: string
+            example: 1
       requestBody:
         content:
           application/json:
@@ -530,6 +570,14 @@ paths:
       description: feature for user delete product from cart
       security:
         - JWTAuth: []
+      parameters:
+        - name: cart_id
+          description: cart_id
+          required: true
+          in: path
+          schema:
+            type: string
+            example: 1  
       responses:
         200:
           description: deleted cart success
@@ -564,7 +612,7 @@ paths:
               example:
                 data:
                   id: 1
-                  user_id: 2
+                  seller: "Griffin"
                   total_product: 5
                   total_amount: 56000
                   status: "pending"
@@ -579,6 +627,7 @@ paths:
     get:
       tags:
         - transactions
+      summary: transaction history
       description: feature for user create new cart
       security:
         - JWTAuth: []
@@ -595,7 +644,7 @@ paths:
               example:
                 data: [{
                   id: 1,
-                  user_id: 2,
+                  seller: "Griffin",
                   total_product: 5,
                   subtotal: 56000,
                   status: "pending",
@@ -604,7 +653,7 @@ paths:
                   },
                   {
                   id: 2,
-                  user_id: 2,
+                  seller: "Griffin",
                   total_product: 10,
                   subtotal: 100000,
                   status: "success",
@@ -613,7 +662,7 @@ paths:
                   },
                   {
                   id: 3,
-                  user_id: 2,
+                  seller: "Griffin",
                   total_product: 5,
                   subtotal: 60000,
                   status: "cancelled",
@@ -626,7 +675,7 @@ paths:
         500:
           $ref: '#/components/responses/500'
 
-  /transactions/{transation_id}:
+  /transactions/{transaction_id}:
     get:
       tags:
         - transactions
@@ -634,6 +683,14 @@ paths:
       description: feature for show detail transactions
       security:
         - JWTAuth: []
+      parameters:
+        - name: transaction_id
+          description: transaction_id
+          required: true
+          in: path
+          schema:
+            type: string
+            example: 1  
       responses:
         200: 
           description: "success show transaction"
@@ -673,6 +730,14 @@ paths:
       description: feature for update transaction status
       security:
         - JWTAuth: []
+      parameters:
+        - name: transaction_id
+          description: transaction_id
+          required: true
+          in: path
+          schema:
+            type: string
+            example: 1 
       responses:
         200: 
           description: "success update transaction status"
