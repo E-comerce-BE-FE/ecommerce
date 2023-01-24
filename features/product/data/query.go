@@ -33,7 +33,17 @@ func (pq *productQry) AddProduct(userID uint, newProduct product.Core) (product.
 
 // AllProduct implements product.ProductData
 func (pq *productQry) AllProduct() ([]product.Core, error) {
-	panic("unimplemented")
+	data := []Product{}
+	err := pq.db.Find(&data).Error
+	if err != nil {
+		log.Println("query error", err.Error())
+		return []product.Core{}, errors.New("server error")
+	}
+	result := []product.Core{}
+	for i := 0; i < len(data); i++ {
+		result = append(result, DataToCore(data[i]))
+	}
+	return result, nil
 }
 
 // Delete implements product.ProductData
