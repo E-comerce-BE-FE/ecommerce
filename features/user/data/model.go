@@ -14,6 +14,16 @@ type User struct {
 	Address        string
 	Password       string
 	Profilepicture string
+	Product        Product
+}
+
+type Product struct {
+	gorm.Model
+	ProductName  string
+	ProductImage string
+	Stock        int
+	Price        int
+	Description  string
 }
 
 func ToCore(data User) user.Core {
