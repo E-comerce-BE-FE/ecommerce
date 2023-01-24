@@ -5,8 +5,8 @@ import (
 	"log"
 
 	// cmData "ecommerce/features/cart/data"
-	// cData "ecommerce/features/product/data"
-	// usrData "ecommerce/features/user/data"
+	pData "ecommerce/features/product/data"
+	usrData "ecommerce/features/user/data"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -25,7 +25,7 @@ func InitDB(dc DBConfig) *gorm.DB {
 }
 
 func Migrate(db *gorm.DB) {
-	// db.AutoMigrate(usrData.User{})
-	// db.AutoMigrate(cData.Content{})
+	db.AutoMigrate(usrData.User{})
+	db.AutoMigrate(pData.Product{})
 	// db.AutoMigrate(cmData.Comment{})
 }
