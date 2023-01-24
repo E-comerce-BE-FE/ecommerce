@@ -9,19 +9,17 @@ import (
 	"mime/multipart"
 	"strings"
 
-	"github.com/go-playground/validator"
 	"github.com/golang-jwt/jwt"
+	uuid "github.com/satori/go.uuid"
 )
 
 type userUseCase struct {
 	qry user.UserData
-	vld *validator.Validate
 }
 
 func New(ud user.UserData) user.UserService {
 	return &userUseCase{
 		qry: ud,
-		vld: validator.New(),
 	}
 }
 
@@ -100,6 +98,19 @@ func (uuc *userUseCase) Update(token interface{}, fileData multipart.FileHeader,
 	if id <= 0 {
 		return user.Core{}, errors.New("data not found")
 	}
+
+	fileName := uuid.NewV4().String()
+	fileData.Filename = fileName + fileData.Filename[(len(fileData.Filename)-5):len(fileData.Filename)]
+	src, err := fileData.Open()
+	if err != nil {
+		return user.Core{}, err
+	}
+	defer src.Close()
+	uploadURL, err := helper.UploadToS3(fileData.Filename, src)
+	if err != nil {
+		return user.Core{}, err
+	}
+	updateData.Profilepicture = uploadURL
 
 	res, err := uuc.qry.Update(uint(id), updateData)
 	if err != nil {

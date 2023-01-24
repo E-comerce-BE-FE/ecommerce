@@ -65,13 +65,7 @@ func (uc *userControll) Update() echo.HandlerFunc {
 
 		formHeader, err := c.FormFile("file")
 		if err != nil {
-			return c.JSON(
-				http.StatusInternalServerError,
-				helper.MediaDto{
-					StatusCode: http.StatusInternalServerError,
-					Message:    "error",
-					Data:       &echo.Map{"data": "Select a file to upload"},
-				})
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "file cannot empty"})
 		}
 
 		token := c.Get("user")
