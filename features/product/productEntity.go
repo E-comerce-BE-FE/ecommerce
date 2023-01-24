@@ -41,7 +41,7 @@ type ProductService interface {
 type ProductData interface {
 	AddProduct(userID uint, newProduct Core) (Core, error)
 	EditProduct(userID uint, productID uint, editedProduct Core) (Core, error)
-	Delete(productID uint) error
+	Delete(userID uint, productID uint) error
 	AllProduct() ([]Core, error)
 	ProductDetail(productID uint) (Core, error)
 }
