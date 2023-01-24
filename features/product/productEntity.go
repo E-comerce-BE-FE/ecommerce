@@ -1,6 +1,10 @@
 package product
 
-import "github.com/labstack/echo/v4"
+import (
+	"mime/multipart"
+
+	"github.com/labstack/echo/v4"
+)
 
 type Core struct {
 	ID           uint
@@ -27,8 +31,8 @@ type ProductHandler interface {
 }
 
 type ProductService interface {
-	AddProduct(token interface{}, newProduct Core) (Core, error)
-	EditProduct(token interface{}, productID uint, editedProduct Core) (Core, error)
+	AddProduct(token interface{}, formHeader multipart.FileHeader, newProduct Core) (Core, error)
+	EditProduct(token interface{}, formHeader multipart.FileHeader, productID uint, editedProduct Core) (Core, error)
 	Delete(token interface{}, productID uint) error
 	AllProduct() ([]Core, error)
 	ProductDetail(productID uint) (Core, error)
