@@ -446,21 +446,23 @@ paths:
         500:
           $ref: '#/components/responses/500'
 
-  /carts/{product_id}:
+  /carts:
     post:
       tags:
         - carts
       description: feature for user create new cart
       security:
         - JWTAuth: []
-      parameters:
-        - name: product_id
-          description: product_id
-          required: true
-          in: path
-          schema:
-            type: string
-            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+            example:
+              product_id: 1
       responses:
         201: 
           description: "success added to cart"
@@ -478,7 +480,6 @@ paths:
         500:
           $ref: '#/components/responses/500'
     
-  /carts:
     get:
       tags:
         - carts
@@ -587,6 +588,16 @@ paths:
       description: feature for user create new cart
       security:
         - JWTAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cart_id:
+                  type: integer
+            example:
+              cart_id: 1
       responses:
         201: 
           description: "success added transaction"
@@ -598,15 +609,35 @@ paths:
                   message:
                     type: string
               example:
-                data:
-                  id: 1
-                  seller: "Griffin"
-                  total_product: 5
-                  total_amount: 56000
-                  status: "pending"
-                  create_at: "23-01-2023 22:10:15"
-                  transaction_code: "isj82j1wd"
+                data: [{
+                  id: 1,
+                  product_id: 1,
+                  product_name: "Pepsodent",
+                  total_product: 3,
+                  subtotal: 36000,
+                  create_at: "23-01-2023 22:10:15",
+                  status: "pending",
+                  transaction_code: "8d19sn6dt15"
+                  },
+                  {
+                  id: 2,
+                  product_id: 2,
+                  product_name: "Lifeboy",
+                  total_product: 2,
+                  subtotal: 20000,
+                  create_at: "23-01-2023 22:10:15",
+                  status: "pending",
+                  transaction_code: "8d19sn6dt15"
+                  }]
                 message: "Success added"
+                # id: 1
+                #   seller: "Griffin"
+                #   total_product: 5
+                #   total_amount: 56000
+                #   status: "pending"
+                #   create_at: "23-01-2023 22:10:15"
+                #   transaction_code: "isj82j1wd"
+                # message: "Success added"
         400:
           $ref: '#/components/responses/400'
         500:
