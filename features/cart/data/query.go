@@ -76,9 +76,9 @@ func (cq *cartQuery) CartList(userID uint) ([]cart.Core, error) {
 }
 
 // Delete implements cart.CartData
-func (cq *cartQuery) Delete(cartID uint, productID uint) error {
+func (cq *cartQuery) Delete(userID uint, cartID uint) error {
 	data := Cart{}
-	qry := cq.db.Where("id = ? and product_id = ?", cartID, productID).Delete(&data)
+	qry := cq.db.Where("id = ? and user_id = ?", cartID, userID).Delete(&data)
 
 	affrows := qry.RowsAffected
 	if affrows <= 0 {

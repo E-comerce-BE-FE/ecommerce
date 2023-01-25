@@ -31,5 +31,5 @@ type CartData interface {
 	AddToCart(userID uint, productID uint, add Core) (Core, error)
 	CartList(userID uint) ([]Core, error)
 	UpdateQty(userID uint, cartID uint, quantity int) (Core, error)
-	Delete(cartID uint, productID uint) error
+	Delete(userID uint, cartID uint) error
 }
