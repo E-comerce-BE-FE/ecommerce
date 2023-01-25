@@ -8,6 +8,9 @@ import (
 	prdData "ecommerce/features/product/data"
 	prdHdl "ecommerce/features/product/handler"
 	prdSrv "ecommerce/features/product/services"
+	transData "ecommerce/features/transaction/data"
+	transHdl "ecommerce/features/transaction/handler"
+	transSrv "ecommerce/features/transaction/services"
 	usrData "ecommerce/features/user/data"
 	usrHdl "ecommerce/features/user/handler"
 	usrSrv "ecommerce/features/user/services"
@@ -37,6 +40,10 @@ func main() {
 	cSrv := cartSrv.New(cData)
 	cHdl := cartHdl.New(cSrv)
 
+	tData := transData.New(db)
+	tSrv := transSrv.New(tData)
+	tHdl := transHdl.New(tSrv)
+
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.CORS())
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -62,6 +69,9 @@ func main() {
 	e.GET("/carts", cHdl.CartList(), middleware.JWT([]byte(config.JWTKey)))
 	e.PUT("/carts/:id", cHdl.UpdateQty(), middleware.JWT([]byte(config.JWTKey)))
 	e.DELETE("/carts/:id", cHdl.Delete(), middleware.JWT([]byte(config.JWTKey)))
+
+	//Transaction
+	e.POST("/transactions", tHdl.CreateTransaction(), middleware.JWT([]byte(config.JWTKey)))
 
 	// ========== Run Program ===========
 	if err := e.Start(":8000"); err != nil {

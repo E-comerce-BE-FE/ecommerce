@@ -85,9 +85,9 @@ func (cc *cartController) UpdateQty() echo.HandlerFunc {
 
 		res, err := cc.srv.UpdateQty(c.Get("user"), uint(cartID), input.Qty)
 		if err != nil {
-			if strings.Contains(err.Error(), "format") {
-				return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
-			}
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
+			// if strings.Contains(err.Error(), "format") {
+			// }
 		}
 		// log.Println(res)
 		return c.JSON(http.StatusCreated, map[string]interface{}{
