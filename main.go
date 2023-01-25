@@ -2,6 +2,9 @@ package main
 
 import (
 	"ecommerce/config"
+	cartData "ecommerce/features/cart/data"
+	cartHdl "ecommerce/features/cart/handler"
+	cartSrv "ecommerce/features/cart/services"
 	prdData "ecommerce/features/product/data"
 	prdHdl "ecommerce/features/product/handler"
 	prdSrv "ecommerce/features/product/services"
@@ -30,6 +33,10 @@ func main() {
 	pSrv := prdSrv.New(pData)
 	pHdl := prdHdl.New((pSrv))
 
+	cData := cartData.New(db)
+	cSrv := cartSrv.New(cData)
+	cHdl := cartHdl.New(cSrv)
+
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.CORS())
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
@@ -49,6 +56,10 @@ func main() {
 	e.GET("/products/:id", pHdl.ProductDetail())
 	e.PUT("/products/:id", pHdl.EditProduct(), middleware.JWT([]byte(config.JWTKey)))
 	e.DELETE("/products/:id", pHdl.Delete(), middleware.JWT([]byte(config.JWTKey)))
+
+	//Cart
+	e.POST("/carts", cHdl.AddToCart(), middleware.JWT([]byte(config.JWTKey)))
+	e.GET("/carts", cHdl.CartList(), middleware.JWT([]byte(config.JWTKey)))
 
 	// ========== Run Program ===========
 	if err := e.Start(":8000"); err != nil {

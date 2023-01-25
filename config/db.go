@@ -5,6 +5,7 @@ import (
 	"log"
 
 	// cmData "ecommerce/features/cart/data"
+	cartData "ecommerce/features/cart/data"
 	pData "ecommerce/features/product/data"
 	usrData "ecommerce/features/user/data"
 
@@ -27,5 +28,5 @@ func InitDB(dc DBConfig) *gorm.DB {
 func Migrate(db *gorm.DB) {
 	db.AutoMigrate(usrData.User{})
 	db.AutoMigrate(pData.Product{})
-	// db.AutoMigrate(cmData.Comment{})
+	db.AutoMigrate(cartData.Cart{})
 }
