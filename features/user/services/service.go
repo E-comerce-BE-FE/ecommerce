@@ -22,15 +22,33 @@ func New(ud user.UserData) user.UserService {
 		qry: ud,
 	}
 }
+func (uuc *userUseCase) Register(newUser user.Core) (user.Core, error) {
+	hashed, _ := helper.GeneratePassword(newUser.Password)
+	newUser.Password = string(hashed)
+	res, err := uuc.qry.Register(newUser)
+	if err != nil {
+		msg := ""
+		if strings.Contains(err.Error(), "duplicated") {
+			msg = "data already used"
+		} else if strings.Contains(err.Error(), "empty") {
+			msg = "email not allowed empty"
+		} else {
+			msg = "server error"
+		}
+		return user.Core{}, errors.New(msg)
+	}
+
+	return res, nil
+}
 
 func (uuc *userUseCase) Login(email, password string) (string, user.Core, error) {
 	res, err := uuc.qry.Login(email)
 	if err != nil {
 		msg := ""
-		if strings.Contains(err.Error(), "not found") {
-			msg = "data not found"
+		if strings.Contains(err.Error(), "empty") {
+			msg = "email or password not allowed empty"
 		} else {
-			msg = "server error"
+			msg = "account not registered or server error"
 		}
 		return "", user.Core{}, errors.New(msg)
 	}
@@ -50,46 +68,14 @@ func (uuc *userUseCase) Login(email, password string) (string, user.Core, error)
 
 }
 
-func (uuc *userUseCase) Register(newUser user.Core) (user.Core, error) {
-	hashed, err := helper.GeneratePassword(newUser.Password)
-	if err != nil {
-		log.Println("bcrypt error ", err.Error())
-		return user.Core{}, errors.New("password process error")
-	}
-
-	newUser.Password = string(hashed)
-	res, err := uuc.qry.Register(newUser)
-
-	if err != nil {
-		msg := ""
-		if strings.Contains(err.Error(), "duplicated") {
-			msg = "data already used"
-		} else {
-			msg = "server error"
-		}
-		return user.Core{}, errors.New(msg)
-	}
-
-	return res, nil
-}
-
 func (uuc *userUseCase) Profile(token interface{}) (interface{}, error) {
 	id := helper.ExtractToken(token)
-	if id <= 0 {
-		return user.Core{}, errors.New("data not found")
-	}
 
-	res, err := uuc.qry.Profile()
+	res, err := uuc.qry.Profile(uint(id))
 	if err != nil {
-		msg := ""
-		if strings.Contains(err.Error(), "not found") {
-			msg = "data not found"
-		} else {
-			msg = "server error"
-		}
-		return user.Core{}, errors.New(msg)
+		log.Println("data not found")
+		return user.Core{}, errors.New("query error, problem with server")
 	}
-
 	return res, nil
 }
 
@@ -128,10 +114,6 @@ func (uuc *userUseCase) Update(token interface{}, fileData multipart.FileHeader,
 
 func (uuc *userUseCase) Delete(token interface{}) error {
 	id := helper.ExtractToken(token)
-	if id <= 0 {
-		return errors.New("data not found")
-	}
-
 	err := uuc.qry.Delete(uint(id))
 	if err != nil {
 		msg := ""
