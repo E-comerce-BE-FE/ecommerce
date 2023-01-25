@@ -20,6 +20,7 @@ type Product struct {
 	ProductImage string
 	Stock        int
 	Price        int
+	UserId       uint
 }
 
 type User struct {

@@ -7,36 +7,36 @@ import (
 )
 
 type UserReponse struct {
-	ID             uint   `json:"id"`
-	Name           string `json:"name"`
-	Profilepicture string `json:"profilepicture"`
+	ID        uint   `json:"id"`
+	Name      string `json:"name"`
+	UserImage string `json:"user_image"`
 }
 
 func ToResponse(data user.Core) UserReponse {
 	return UserReponse{
-		ID:             data.ID,
-		Name:           data.Name,
-		Profilepicture: data.Profilepicture,
+		ID:        data.ID,
+		Name:      data.Name,
+		UserImage: data.UserImage,
 	}
 }
 
 type UpdateUserResp struct {
-	Name           string `json:"name"`
-	Email          string `json:"email"`
-	Phone          string `json:"phone"`
-	Address        string `json:"address"`
-	Password       string `json:"password"`
-	Profilepicture string `json:"profilepicture"`
+	Name      string `json:"name"`
+	Email     string `json:"email"`
+	Phone     string `json:"phone"`
+	Address   string `json:"address"`
+	Password  string `json:"password"`
+	UserImage string `json:"user_image"`
 }
 
 func ToResponseUpd(data user.Core) UpdateUserResp {
 	return UpdateUserResp{
-		Name:           data.Name,
-		Email:          data.Email,
-		Phone:          data.Phone,
-		Address:        data.Address,
-		Password:       data.Password,
-		Profilepicture: data.Profilepicture,
+		Name:      data.Name,
+		Email:     data.Email,
+		Phone:     data.Phone,
+		Address:   data.Address,
+		Password:  data.Password,
+		UserImage: data.UserImage,
 	}
 }
 

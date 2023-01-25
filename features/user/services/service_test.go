@@ -5,6 +5,10 @@ import (
 	"ecommerce/helper"
 	"ecommerce/mocks"
 	"errors"
+	"log"
+	"mime/multipart"
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/golang-jwt/jwt"
@@ -134,47 +138,47 @@ func TestProfile(t *testing.T) {
 	})
 }
 
-// func TestUpdate(t *testing.T) {
-// 	repo := mocks.NewUserData(t)
-// 	filePath := filepath.Join("..", "..", "..", "ERD.png")
-// 	// imageFalse, _ := os.Open(filePath)
-// 	// imageFalseCnv := &multipart.FileHeader{
-// 	// 	Filename: imageFalse.Name(),
-// 	// }
-// 	imageTrue, err := os.Open(filePath)
-// 	if err != nil {
-// 		log.Println(err.Error())
-// 	}
-// 	imageTrueCnv := &multipart.FileHeader{
-// 		Filename: imageTrue.Name(),
-// 	}
-// 	inputData := user.Core{ID: 1, Name: "Alif", UserName: "alif123", Image: "ERD.png"}
-// 	resData := user.Core{ID: 1, Name: "Alif", UserName: "alif123", Image: imageTrueCnv.Filename}
-// 	t.Run("success updating account", func(t *testing.T) {
-// 		repo.On("Update", 1, inputData).Return(resData, nil).Once()
-// 		srv := New(repo)
-// 		_, token := helper.GenerateToken(1)
-// 		pToken := token.(*jwt.Token)
-// 		pToken.Valid = true
-// 		res, err := srv.Update(*imageTrueCnv, pToken, inputData)
-// 		assert.Nil(t, err)
-// 		assert.Equal(t, resData.ID, res.ID)
-// 		repo.AssertExpectations(t)
-// 	})
+func TestUpdate(t *testing.T) {
+	repo := mocks.NewUserData(t)
+	filePath := filepath.Join("..", "..", "..", "ERD.png")
+	// imageFalse, _ := os.Open(filePath)
+	// imageFalseCnv := &multipart.FileHeader{
+	// 	Filename: imageFalse.Name(),
+	// }
+	imageTrue, err := os.Open(filePath)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	imageTrueCnv := &multipart.FileHeader{
+		Filename: imageTrue.Name(),
+	}
+	inputData := user.Core{ID: 1, Name: "Alif", Phone: "08123", UserImage: "ERD.png"}
+	resData := user.Core{ID: 1, Name: "Alif", Phone: "08123", UserImage: imageTrueCnv.Filename}
+	t.Run("success updating account", func(t *testing.T) {
+		repo.On("Update", uint(1), inputData).Return(resData, nil).Once()
+		srv := New(repo)
+		_, token := helper.GenerateToken(1)
+		pToken := token.(*jwt.Token)
+		pToken.Valid = true
+		res, err := srv.Update(pToken, *imageTrueCnv, inputData)
+		assert.Nil(t, err)
+		assert.Equal(t, resData.ID, res.ID)
+		repo.AssertExpectations(t)
+	})
 
-// 	t.Run("fail updating account", func(t *testing.T) {
-// 		repo.On("Update", 1, inputData).Return(user.Core{}, errors.New("query error,update fail")).Once()
-// 		srv := New(repo)
-// 		_, token := helper.GenerateToken(1)
-// 		pToken := token.(*jwt.Token)
-// 		pToken.Valid = true
-// 		res, err := srv.Update(*imageTrueCnv, pToken, inputData)
-// 		assert.NotNil(t, err)
-// 		assert.ErrorContains(t, err, "error")
-// 		assert.Equal(t, user.Core{}, res)
-// 		repo.AssertExpectations(t)
-// 	})
-// }
+	t.Run("fail updating account", func(t *testing.T) {
+		repo.On("Update", uint(1), inputData).Return(user.Core{}, errors.New("query error,update fail")).Once()
+		srv := New(repo)
+		_, token := helper.GenerateToken(1)
+		pToken := token.(*jwt.Token)
+		pToken.Valid = true
+		res, err := srv.Update(pToken, *imageTrueCnv, inputData)
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "error")
+		assert.Equal(t, user.Core{}, res)
+		repo.AssertExpectations(t)
+	})
+}
 
 func TestDelete(t *testing.T) {
 	repo := mocks.NewUserData(t)
