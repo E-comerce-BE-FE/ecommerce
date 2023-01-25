@@ -57,13 +57,13 @@ func (_m *CartData) CartList(userID uint) ([]cart.Core, error) {
 	return r0, r1
 }
 
-// Delete provides a mock function with given fields:
-func (_m *CartData) Delete() error {
-	ret := _m.Called()
+// Delete provides a mock function with given fields: userID, cartID
+func (_m *CartData) Delete(userID uint, cartID uint) error {
+	ret := _m.Called(userID, cartID)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func() error); ok {
-		r0 = rf()
+	if rf, ok := ret.Get(0).(func(uint, uint) error); ok {
+		r0 = rf(userID, cartID)
 	} else {
 		r0 = ret.Error(0)
 	}
