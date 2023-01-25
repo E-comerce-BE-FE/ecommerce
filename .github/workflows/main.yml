@@ -38,4 +38,4 @@ jobs:
             docker stop econt
             docker rm econt
             docker rmi ${{ secrets.DOCKER_USER }}/ecm
-            docker run --name smcont -d -e DBUSER=${{ secrets.DBUSER }} -e DBPASS=${{ secrets.DBPASS }} -e DBHOST=${{ secrets.DBHOST }} -e DBPORT=3306 -e DBNAME=${{ secrets.DBNAME }} -e JWT_KEY=${{ secrets.JWT_KEY }} -e ACCESS_KEY_ID=${{ secrets.ACCESS_KEY_ID }} -e ACCESS_KEY_SECRET=${{ secrets.ACCESS_KEY_SECRET }} -e AWS_REGION=${{ secrets.AWS_REGION }} --link mysqlku -p 80:8000 ${{ secrets.DOCKER_USER }}/ecm
+            docker run --name econt -d -e DBUSER=${{ secrets.DBUSER }} -e DBPASS=${{ secrets.DBPASS }} -e DBHOST=${{ secrets.DBHOST }} -e DBPORT=3306 -e DBNAME=${{ secrets.DBNAME }} -e JWT_KEY=${{ secrets.JWT_KEY }} -e ACCESS_KEY_ID=${{ secrets.ACCESS_KEY_ID }} -e ACCESS_KEY_SECRET=${{ secrets.ACCESS_KEY_SECRET }} -e AWS_REGION=${{ secrets.AWS_REGION }} --link mysqlku -p 80:8000 ${{ secrets.DOCKER_USER }}/ecm
