@@ -7,13 +7,13 @@ import (
 )
 
 type Core struct {
-	ID             uint
-	Name           string
-	Email          string
-	Phone          string
-	Address        string
-	Password       string
-	Profilepicture string
+	ID        uint
+	Name      string
+	Email     string
+	Phone     string
+	Address   string
+	Password  string
+	UserImage string
 }
 
 type UserHandler interface {

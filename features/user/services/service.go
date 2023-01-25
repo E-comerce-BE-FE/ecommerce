@@ -52,7 +52,6 @@ func (uuc *userUseCase) Login(email, password string) (string, user.Core, error)
 		}
 		return "", user.Core{}, errors.New(msg)
 	}
-
 	if err := helper.ComparePassword(res.Password, password); err != nil {
 		log.Println("login compare", err.Error())
 		return "", user.Core{}, errors.New("password not matched")
@@ -63,7 +62,6 @@ func (uuc *userUseCase) Login(email, password string) (string, user.Core, error)
 	claims["userID"] = res.ID
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	useToken, _ := token.SignedString([]byte(config.JWTKey))
-
 	return useToken, res, nil
 
 }
@@ -81,22 +79,23 @@ func (uuc *userUseCase) Profile(token interface{}) (interface{}, error) {
 
 func (uuc *userUseCase) Update(token interface{}, fileData multipart.FileHeader, updateData user.Core) (user.Core, error) {
 	id := helper.ExtractToken(token)
-	if id <= 0 {
-		return user.Core{}, errors.New("data not found")
+	if fileData.Size != 0 {
+		if fileData.Size > 500000 {
+			return user.Core{}, errors.New("size error")
+		}
+		fileName := uuid.NewV4().String()
+		fileData.Filename = fileName + fileData.Filename[(len(fileData.Filename)-5):len(fileData.Filename)]
+		src, err := fileData.Open()
+		if err != nil {
+			return user.Core{}, errors.New("error open fileData")
+		}
+		defer src.Close()
+		uploadURL, err := helper.UploadToS3(fileData.Filename, src)
+		if err != nil {
+			return user.Core{}, errors.New("cannot upload to s3 server error")
+		}
+		updateData.UserImage = uploadURL
 	}
-
-	fileName := uuid.NewV4().String()
-	fileData.Filename = fileName + fileData.Filename[(len(fileData.Filename)-5):len(fileData.Filename)]
-	src, err := fileData.Open()
-	if err != nil {
-		return user.Core{}, err
-	}
-	defer src.Close()
-	uploadURL, err := helper.UploadToS3(fileData.Filename, src)
-	if err != nil {
-		return user.Core{}, err
-	}
-	updateData.Profilepicture = uploadURL
 
 	res, err := uuc.qry.Update(uint(id), updateData)
 	if err != nil {

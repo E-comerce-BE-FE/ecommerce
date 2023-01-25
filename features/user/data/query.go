@@ -20,7 +20,7 @@ func New(db *gorm.DB) user.UserData {
 
 func (uq *userQuery) Login(email string) (user.Core, error) {
 	if email == "" {
-		log.Println("data empty")
+		log.Println("data empty, query error")
 		return user.Core{}, errors.New("email not allowed empty")
 	}
 	res := User{}

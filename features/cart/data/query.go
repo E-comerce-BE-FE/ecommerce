@@ -54,19 +54,20 @@ func (cq *cartQuery) CartList(userID uint) ([]cart.Core, error) {
 	for i := 0; i < len(res); i++ {
 		result = append(result, DataToCore(res[i]))
 		// cari data user berdasarkan cart user_id
-		user := User{}
-		err = cq.db.Where("id = ?", res[i].UserId).First(&user).Error
-		if err != nil {
-			log.Println("query error", err.Error())
-			return []cart.Core{}, errors.New("server error")
-		}
-		// cari data product berdasarkan cart product_id
+
 		prd := Product{}
 		err = cq.db.Where("id = ?", res[i].ProductId).First(&prd).Error
 		if err != nil {
 			log.Println("query error", err.Error())
 			return []cart.Core{}, errors.New("server error")
 		}
+		user := User{}
+		err = cq.db.Where("id = ?", prd.UserId).First(&user).Error
+		if err != nil {
+			log.Println("query error", err.Error())
+			return []cart.Core{}, errors.New("server error")
+		}
+		// cari data product berdasarkan cart product_id
 		result[i].Seller = user.Name
 		result[i].ProductName = prd.ProductName
 		result[i].ProductImage = prd.ProductImage

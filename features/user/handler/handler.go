@@ -23,6 +23,11 @@ func (uc *userControll) Login() echo.HandlerFunc {
 		if err := c.Bind(&input); err != nil {
 			return c.JSON(http.StatusBadRequest, "input format incorrect")
 		}
+		if input.Email == "" {
+			return c.JSON(http.StatusBadRequest, "email not allowed empty")
+		} else if input.Password == "" {
+			return c.JSON(http.StatusBadRequest, "password not allowed empty")
+		}
 
 		token, res, err := uc.srv.Login(input.Email, input.Password)
 		if err != nil {
@@ -35,7 +40,8 @@ func (uc *userControll) Login() echo.HandlerFunc {
 func (uc *userControll) Register() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		input := RegisterRequest{}
-		if err := c.Bind(&input); err != nil {
+		err := c.Bind(&input)
+		if err != nil {
 			return c.JSON(http.StatusBadRequest, "input format incorrect")
 		}
 
@@ -62,19 +68,32 @@ func (uc *userControll) Profile() echo.HandlerFunc {
 
 func (uc *userControll) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
-
-		formHeader, err := c.FormFile("file")
+		input := UpdateRequest{}
+		err := c.Bind(&input)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "file cannot empty"})
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "wrong input format"})
+		}
+		// log.Println(input.FileHeader)
+		// return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "wrong input format"})
+		//proses cek ada gambar atau tidak
+		checkFile, _, _ := c.Request().FormFile("file")
+		// //debugging
+		// log.Println(checkFile)
+		// return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "Select a file to upload"})
+		//cek file kalau ada isi nya
+		if checkFile != nil {
+			formHeader, err := c.FormFile("file")
+			if err != nil {
+				return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "Select a file to upload"})
+			}
+			input.FileHeader = *formHeader
 		}
 
-		token := c.Get("user")
-		input := UpdateRequest{}
 		if err := c.Bind(&input); err != nil {
 			return c.JSON(http.StatusBadRequest, "input format incorrect")
 		}
 
-		res, err := uc.srv.Update(token, *formHeader, *ReqToCore(input))
+		res, err := uc.srv.Update(c.Get("user"), input.FileHeader, *ReqToCore(input))
 		if err != nil {
 			return c.JSON(PrintErrorResponse(err.Error()))
 		}
@@ -92,6 +111,6 @@ func (uc *userControll) Delete() echo.HandlerFunc {
 			return c.JSON(PrintErrorResponse(err.Error()))
 		}
 
-		return c.JSON(PrintSuccessReponse(http.StatusOK, "success delete profile", err))
+		return c.JSON(PrintSuccessReponse(http.StatusOK, "success delete profile"))
 	}
 }
