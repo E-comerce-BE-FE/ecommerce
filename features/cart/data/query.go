@@ -76,11 +76,43 @@ func (cq *cartQuery) CartList(userID uint) ([]cart.Core, error) {
 }
 
 // Delete implements cart.CartData
-func (cq *cartQuery) Delete() error {
-	panic("unimplemented")
+func (cq *cartQuery) Delete(cartID uint, productID uint) error {
+	data := Cart{}
+	qry := cq.db.Where("id = ? and product_id = ?", cartID, productID).Delete(&data)
+	err := qry.Error
+
+	affrows := qry.RowsAffected
+	if affrows <= 0 {
+		log.Println("no rows affected")
+		return errors.New("no cart deleted")
+	}
+
+	if err != nil {
+		log.Println("delete query error", err.Error())
+		return errors.New("delete data fail")
+	}
+
+	return nil
 }
 
 // UpdateQty implements cart.CartData
-func (cq *cartQuery) UpdateQty(userID uint, productID uint, quantity int) (cart.Core, error) {
-	panic("unimplemented")
+func (cq *cartQuery) UpdateQty(userID uint, cartID uint, quantity int) (cart.Core, error) {
+	res := Cart{}
+	qry := cq.db.Where("id = ? and user_id = ?", cartID, userID).Updates(&res)
+	err := qry.Error
+
+	affrows := qry.RowsAffected
+	if affrows <= 0 {
+		log.Println("no rows affected")
+		return cart.Core{}, errors.New("no cart updated")
+	}
+
+	if err != nil {
+		log.Println("update query error", err.Error())
+		return cart.Core{}, errors.New("update data fail")
+	}
+
+	res.Qty = quantity
+
+	return cart.Core{}, nil
 }
