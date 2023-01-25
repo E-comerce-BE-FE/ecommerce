@@ -43,6 +43,7 @@ func (csc *cartServiceCase) CartList(token interface{}) ([]cart.Core, error) {
 func (csc *cartServiceCase) Delete(token interface{}, cartID uint) error {
 	userID := helper.ExtractToken(token)
 	err := csc.qry.Delete(uint(userID), cartID)
+
 	if err != nil {
 		log.Println("query error", err.Error())
 		return errors.New("query error, problem with server")

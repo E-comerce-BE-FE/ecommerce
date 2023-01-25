@@ -76,10 +76,9 @@ func (cq *cartQuery) CartList(userID uint) ([]cart.Core, error) {
 }
 
 // Delete implements cart.CartData
-func (cq *cartQuery) Delete(cartID uint, productID uint) error {
+func (cq *cartQuery) Delete(userID uint, cartID uint) error {
 	data := Cart{}
-	qry := cq.db.Where("id = ? and product_id = ?", cartID, productID).Delete(&data)
-	err := qry.Error
+	qry := cq.db.Where("id = ? and user_id = ?", cartID, userID).Delete(&data)
 
 	affrows := qry.RowsAffected
 	if affrows <= 0 {
@@ -87,6 +86,7 @@ func (cq *cartQuery) Delete(cartID uint, productID uint) error {
 		return errors.New("no cart deleted")
 	}
 
+	err := qry.Error
 	if err != nil {
 		log.Println("delete query error", err.Error())
 		return errors.New("delete data fail")
@@ -97,9 +97,25 @@ func (cq *cartQuery) Delete(cartID uint, productID uint) error {
 
 // UpdateQty implements cart.CartData
 func (cq *cartQuery) UpdateQty(userID uint, cartID uint, quantity int) (cart.Core, error) {
+	crt := Cart{}
+	err := cq.db.Where("id = ?", cartID).First(&crt).Error
+	if err != nil {
+		log.Println("select query error", err.Error())
+		return cart.Core{}, errors.New("select data fail")
+	}
+
+	prd := Product{}
+	err = cq.db.Where("id = ?", crt.ProductId).First(&prd).Error
+	if err != nil {
+		log.Println("select query error", err.Error())
+		return cart.Core{}, errors.New("select data fail")
+	}
+
 	res := Cart{}
-	qry := cq.db.Where("id = ? and user_id = ?", cartID, userID).Updates(&res)
-	err := qry.Error
+	res.Qty = quantity
+	res.UserId = userID
+	res.Amount = prd.Price * quantity
+	qry := cq.db.Where("id = ?", cartID).Updates(&res)
 
 	affrows := qry.RowsAffected
 	if affrows <= 0 {
@@ -107,12 +123,11 @@ func (cq *cartQuery) UpdateQty(userID uint, cartID uint, quantity int) (cart.Cor
 		return cart.Core{}, errors.New("no cart updated")
 	}
 
+	err = qry.Error
 	if err != nil {
 		log.Println("update query error", err.Error())
 		return cart.Core{}, errors.New("update data fail")
 	}
 
-	res.Qty = quantity
-
-	return cart.Core{}, nil
+	return DataToCore(res), nil
 }
