@@ -97,9 +97,25 @@ func (cq *cartQuery) Delete(cartID uint, productID uint) error {
 
 // UpdateQty implements cart.CartData
 func (cq *cartQuery) UpdateQty(userID uint, cartID uint, quantity int) (cart.Core, error) {
+	crt := Cart{}
+	err := cq.db.Where("id = ?", cartID).First(&crt).Error
+	if err != nil {
+		log.Println("select query error", err.Error())
+		return cart.Core{}, errors.New("select data fail")
+	}
+
+	prd := Product{}
+	err = cq.db.Where("id = ?", crt.ProductId).First(&prd).Error
+	if err != nil {
+		log.Println("select query error", err.Error())
+		return cart.Core{}, errors.New("select data fail")
+	}
+
 	res := Cart{}
 	res.Qty = quantity
-	qry := cq.db.Where("id = ? and user_id = ?", cartID, userID).Updates(&res)
+	res.UserId = userID
+	res.Amount = prd.Price * quantity
+	qry := cq.db.Where("id = ?", cartID).Updates(&res)
 
 	affrows := qry.RowsAffected
 	if affrows <= 0 {
@@ -107,7 +123,7 @@ func (cq *cartQuery) UpdateQty(userID uint, cartID uint, quantity int) (cart.Cor
 		return cart.Core{}, errors.New("no cart updated")
 	}
 
-	err := qry.Error
+	err = qry.Error
 	if err != nil {
 		log.Println("update query error", err.Error())
 		return cart.Core{}, errors.New("update data fail")
