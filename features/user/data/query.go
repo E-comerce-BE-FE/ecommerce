@@ -61,7 +61,28 @@ func (uq *userQuery) Profile(userID uint) (interface{}, error) {
 		log.Println("Get By ID query error", err.Error())
 		return user.Core{}, errors.New("query error, problem with server")
 	}
-	return res, nil
+
+	result := make(map[string]interface{})
+	result["id"] = res.ID
+	result["name"] = res.Name
+	// result["email"] = res.Email
+	// result["phone"] = res.Phone
+	// result["address"] = res.Address
+	result["user_image"] = res.UserImage
+	result["product"] = make([]map[string]interface{}, len(res.Product))
+
+	for k, v := range res.Product {
+		data := make(map[string]interface{})
+		data["product_id"] = v.ID
+		data["product_name"] = v.ProductName
+		data["stock"] = v.Stock
+		data["price"] = v.Price
+		data["description"] = v.Description
+		data["product_image"] = v.ProductImage
+		result["product"].([]map[string]interface{})[k] = data
+	}
+
+	return result, nil
 }
 
 func (uq *userQuery) Update(id uint, updateData user.Core) (user.Core, error) {
