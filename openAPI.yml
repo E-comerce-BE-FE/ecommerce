@@ -49,6 +49,8 @@ paths:
                   format: email
                 phone:  
                   type: string
+                address:  
+                  type: string
                 password:
                   type: string
                   format: password
