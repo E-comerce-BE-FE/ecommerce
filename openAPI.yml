@@ -615,7 +615,7 @@ paths:
                 data: [{
                   id: 1,
                   product_id: 1,
-                  product_name: "Pepsodent",
+                  transaction_name: product-shopping,
                   total_product: 3,
                   subtotal: 36000,
                   create_at: "23-01-2023 22:10:15",
@@ -625,7 +625,7 @@ paths:
                   {
                   id: 2,
                   product_id: 2,
-                  product_name: "Lifeboy",
+                  transaction_name: product-shopping,
                   total_product: 2,
                   subtotal: 20000,
                   create_at: "23-01-2023 22:10:15",

@@ -7,6 +7,7 @@ import (
 	// cmData "ecommerce/features/cart/data"
 	cartData "ecommerce/features/cart/data"
 	pData "ecommerce/features/product/data"
+	transData "ecommerce/features/transaction/data"
 	usrData "ecommerce/features/user/data"
 
 	"gorm.io/driver/mysql"
@@ -29,4 +30,6 @@ func Migrate(db *gorm.DB) {
 	db.AutoMigrate(usrData.User{})
 	db.AutoMigrate(pData.Product{})
 	db.AutoMigrate(cartData.Cart{})
+	db.AutoMigrate(transData.Transaction{})
+	db.AutoMigrate(transData.TransactionItem{})
 }
