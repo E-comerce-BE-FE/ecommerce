@@ -19,8 +19,11 @@ func New(db *gorm.DB) user.UserData {
 }
 
 func (uq *userQuery) Login(email string) (user.Core, error) {
+	if email == "" {
+		log.Println("data empty")
+		return user.Core{}, errors.New("email not allowed empty")
+	}
 	res := User{}
-
 	if err := uq.db.Where("email = ?", email).First(&res).Error; err != nil {
 		log.Println("login query error", err.Error())
 		return user.Core{}, errors.New("data not found")
@@ -30,6 +33,10 @@ func (uq *userQuery) Login(email string) (user.Core, error) {
 }
 
 func (uq *userQuery) Register(newUser user.Core) (user.Core, error) {
+	if newUser.Email == "" || newUser.Password == "" {
+		log.Println("data empty")
+		return user.Core{}, errors.New("email or password not allowed empty")
+	}
 	dupEmail := CoreToData(newUser)
 	err := uq.db.Where("email = ?", newUser.Email).First(&dupEmail).Error
 	if err == nil {
@@ -40,7 +47,8 @@ func (uq *userQuery) Register(newUser user.Core) (user.Core, error) {
 	cnv := CoreToData(newUser)
 	err = uq.db.Create(&cnv).Error
 	if err != nil {
-		return user.Core{}, err
+		log.Println("query error", err.Error())
+		return user.Core{}, errors.New("server error")
 	}
 
 	newUser.ID = cnv.ID

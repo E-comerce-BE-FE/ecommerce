@@ -22,13 +22,31 @@ func New(ud user.UserData) user.UserService {
 		qry: ud,
 	}
 }
+func (uuc *userUseCase) Register(newUser user.Core) (user.Core, error) {
+	hashed, _ := helper.GeneratePassword(newUser.Password)
+	newUser.Password = string(hashed)
+	res, err := uuc.qry.Register(newUser)
+	if err != nil {
+		msg := ""
+		if strings.Contains(err.Error(), "duplicated") {
+			msg = "data already used"
+		} else if strings.Contains(err.Error(), "empty") {
+			msg = "email not allowed empty"
+		} else {
+			msg = "server error"
+		}
+		return user.Core{}, errors.New(msg)
+	}
+
+	return res, nil
+}
 
 func (uuc *userUseCase) Login(email, password string) (string, user.Core, error) {
 	res, err := uuc.qry.Login(email)
 	if err != nil {
 		msg := ""
-		if strings.Contains(err.Error(), "not found") {
-			msg = "data not found"
+		if strings.Contains(err.Error(), "empty") {
+			msg = "email or password not allowed empty"
 		} else {
 			msg = "server error"
 		}
@@ -48,29 +66,6 @@ func (uuc *userUseCase) Login(email, password string) (string, user.Core, error)
 
 	return useToken, res, nil
 
-}
-
-func (uuc *userUseCase) Register(newUser user.Core) (user.Core, error) {
-	hashed, err := helper.GeneratePassword(newUser.Password)
-	if err != nil {
-		log.Println("bcrypt error ", err.Error())
-		return user.Core{}, errors.New("password process error")
-	}
-
-	newUser.Password = string(hashed)
-	res, err := uuc.qry.Register(newUser)
-
-	if err != nil {
-		msg := ""
-		if strings.Contains(err.Error(), "duplicated") {
-			msg = "data already used"
-		} else {
-			msg = "server error"
-		}
-		return user.Core{}, errors.New(msg)
-	}
-
-	return res, nil
 }
 
 func (uuc *userUseCase) Profile(token interface{}) (interface{}, error) {
