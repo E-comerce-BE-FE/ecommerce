@@ -58,6 +58,7 @@ paths:
               name: "Fauzi Sofyan"
               email: "fauzilax@gmail.com"
               phone: "0813456"
+              address: bdg
               password: "123"
       responses:
         201: 
