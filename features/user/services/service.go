@@ -48,7 +48,7 @@ func (uuc *userUseCase) Login(email, password string) (string, user.Core, error)
 		if strings.Contains(err.Error(), "empty") {
 			msg = "email or password not allowed empty"
 		} else {
-			msg = "server error"
+			msg = "account not registered or server error"
 		}
 		return "", user.Core{}, errors.New(msg)
 	}
@@ -70,21 +70,12 @@ func (uuc *userUseCase) Login(email, password string) (string, user.Core, error)
 
 func (uuc *userUseCase) Profile(token interface{}) (interface{}, error) {
 	id := helper.ExtractToken(token)
-	if id <= 0 {
-		return user.Core{}, errors.New("data not found")
-	}
 
-	res, err := uuc.qry.Profile()
+	res, err := uuc.qry.Profile(uint(id))
 	if err != nil {
-		msg := ""
-		if strings.Contains(err.Error(), "not found") {
-			msg = "data not found"
-		} else {
-			msg = "server error"
-		}
-		return user.Core{}, errors.New(msg)
+		log.Println("data not found")
+		return user.Core{}, errors.New("query error, problem with server")
 	}
-
 	return res, nil
 }
 
@@ -123,10 +114,6 @@ func (uuc *userUseCase) Update(token interface{}, fileData multipart.FileHeader,
 
 func (uuc *userUseCase) Delete(token interface{}) error {
 	id := helper.ExtractToken(token)
-	if id <= 0 {
-		return errors.New("data not found")
-	}
-
 	err := uuc.qry.Delete(uint(id))
 	if err != nil {
 		msg := ""

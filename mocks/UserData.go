@@ -48,13 +48,13 @@ func (_m *UserData) Login(email string) (user.Core, error) {
 	return r0, r1
 }
 
-// Profile provides a mock function with given fields:
-func (_m *UserData) Profile() (interface{}, error) {
-	ret := _m.Called()
+// Profile provides a mock function with given fields: userID
+func (_m *UserData) Profile(userID uint) (interface{}, error) {
+	ret := _m.Called(userID)
 
 	var r0 interface{}
-	if rf, ok := ret.Get(0).(func() interface{}); ok {
-		r0 = rf()
+	if rf, ok := ret.Get(0).(func(uint) interface{}); ok {
+		r0 = rf(userID)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(interface{})
@@ -62,8 +62,8 @@ func (_m *UserData) Profile() (interface{}, error) {
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+		r1 = rf(userID)
 	} else {
 		r1 = ret.Error(1)
 	}

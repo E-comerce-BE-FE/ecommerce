@@ -55,14 +55,12 @@ func (uq *userQuery) Register(newUser user.Core) (user.Core, error) {
 	return newUser, nil
 }
 
-func (uq *userQuery) Profile() (interface{}, error) {
+func (uq *userQuery) Profile(userID uint) (interface{}, error) {
 	res := User{}
-
-	if err := uq.db.Preload("Product").Find(&res).Error; err != nil {
+	if err := uq.db.Where("id=?", userID).Preload("Product").First(&res).Error; err != nil {
 		log.Println("Get By ID query error", err.Error())
-		return user.Core{}, err
+		return user.Core{}, errors.New("query error, problem with server")
 	}
-
 	return res, nil
 }
 
@@ -97,7 +95,7 @@ func (uq *userQuery) Delete(id uint) error {
 
 	if err != nil {
 		log.Println("delete query error")
-		return errors.New("cannot delete data")
+		return errors.New("cannot delete data, data not found")
 	}
 
 	return nil
