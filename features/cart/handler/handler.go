@@ -3,6 +3,8 @@ package handler
 import (
 	"ecommerce/features/cart"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -52,10 +54,45 @@ func (cc *cartController) CartList() echo.HandlerFunc {
 
 // Delete implements cart.CartHandler
 func (cc *cartController) Delete() echo.HandlerFunc {
-	panic("unimplemented")
+	return func(c echo.Context) error {
+		paramID := c.Param("id")
+		cartID, _ := strconv.Atoi(paramID)
+		err := cc.srv.Delete(c.Get("user"), uint(cartID))
+		if err != nil {
+			if strings.Contains(err.Error(), "not") {
+				return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "you are not allowed delete other people cart"})
+			} else {
+				return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error, deleting cart fail"})
+			}
+		}
+
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "success delete product",
+		})
+	}
 }
 
 // UpdateQty implements cart.CartHandler
 func (cc *cartController) UpdateQty() echo.HandlerFunc {
-	panic("unimplemented")
+	return func(c echo.Context) error {
+		paramID := c.Param("id")
+		cartID, _ := strconv.Atoi(paramID)
+		input := EditCartRequest{}
+		err := c.Bind(&input)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "wrong input format"})
+		}
+
+		res, err := cc.srv.UpdateQty(c.Get("user"), uint(cartID), input.Qty)
+		if err != nil {
+			if strings.Contains(err.Error(), "format") {
+				return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
+			}
+		}
+		// log.Println(res)
+		return c.JSON(http.StatusCreated, map[string]interface{}{
+			"data":    res,
+			"message": "success change quantity data",
+		})
+	}
 }
