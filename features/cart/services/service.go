@@ -61,3 +61,14 @@ func (csc *cartServiceCase) UpdateQty(token interface{}, cartID uint, quantity i
 	}
 	return res, nil
 }
+
+// CartResult implements cart.CartService
+func (csc *cartServiceCase) CartResult(token interface{}) ([]cart.Core, error) {
+	userID := helper.ExtractToken(token)
+	res, err := csc.qry.CartResult(uint(userID))
+	if err != nil {
+		log.Println("query error", err.Error())
+		return []cart.Core{}, errors.New("query error, problem with server")
+	}
+	return res, nil
+}

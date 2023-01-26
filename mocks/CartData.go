@@ -57,6 +57,29 @@ func (_m *CartData) CartList(userID uint) ([]cart.Core, error) {
 	return r0, r1
 }
 
+// CartResult provides a mock function with given fields: userID
+func (_m *CartData) CartResult(userID uint) ([]cart.Core, error) {
+	ret := _m.Called(userID)
+
+	var r0 []cart.Core
+	if rf, ok := ret.Get(0).(func(uint) []cart.Core); ok {
+		r0 = rf(userID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]cart.Core)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(uint) error); ok {
+		r1 = rf(userID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Delete provides a mock function with given fields: userID, cartID
 func (_m *CartData) Delete(userID uint, cartID uint) error {
 	ret := _m.Called(userID, cartID)

@@ -57,6 +57,29 @@ func (_m *CartService) CartList(token interface{}) ([]cart.Core, error) {
 	return r0, r1
 }
 
+// CartResult provides a mock function with given fields: token
+func (_m *CartService) CartResult(token interface{}) ([]cart.Core, error) {
+	ret := _m.Called(token)
+
+	var r0 []cart.Core
+	if rf, ok := ret.Get(0).(func(interface{}) []cart.Core); ok {
+		r0 = rf(token)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]cart.Core)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(interface{}) error); ok {
+		r1 = rf(token)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // Delete provides a mock function with given fields: token, cartID
 func (_m *CartService) Delete(token interface{}, cartID uint) error {
 	ret := _m.Called(token, cartID)
