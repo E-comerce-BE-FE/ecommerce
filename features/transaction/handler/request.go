@@ -5,5 +5,9 @@ type TransactionRequest struct {
 	Email    string `json:"email" form:"email"`
 	Phone    string `json:"phone" form:"phone"`
 	Address  string `json:"address" form:"address"`
-	SubTotal string `json:"subtotal" form:"subtotal"`
+	SubTotal int64  `json:"sub_total" form:"sub_total"`
+}
+
+type UpdateTransRequest struct {
+	CodeTrans string `json:"code_transaction" form:"code_transaction"`
 }
