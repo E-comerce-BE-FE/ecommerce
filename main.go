@@ -73,6 +73,8 @@ func main() {
 
 	//Transaction
 	e.POST("/transactions", tHdl.CreateTransaction(), middleware.JWT([]byte(config.JWTKey)))
+	e.PUT("/transactions", tHdl.UpdateTransaction())
+	e.GET("/transactions", tHdl.TransactionHistory(), middleware.JWT([]byte(config.JWTKey)))
 
 	// ========== Run Program ===========
 	if err := e.Start(":8000"); err != nil {

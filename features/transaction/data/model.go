@@ -11,6 +11,8 @@ type Transaction struct {
 	TotalProduct    int
 	SubTotal        int
 	TransactionCode string
+	PaymentLink     string
+	UserId          uint
 	Status          string
 }
 
@@ -47,6 +49,7 @@ func DataToCore(data Transaction) transaction.Core {
 		SubTotal:        data.SubTotal,
 		TransactionCode: data.TransactionCode,
 		Status:          data.Status,
+		PaymentLink:     data.PaymentLink,
 	}
 }
 
@@ -57,6 +60,7 @@ func CoreToData(core transaction.Core) Transaction {
 		SubTotal:        core.SubTotal,
 		TransactionCode: core.TransactionCode,
 		Status:          core.Status,
+		PaymentLink:     core.PaymentLink,
 	}
 }
 

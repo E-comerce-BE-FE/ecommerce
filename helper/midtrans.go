@@ -1,6 +1,9 @@
 package helper
 
 import (
+	"math/rand"
+	"time"
+
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/snap"
 	uuid "github.com/satori/go.uuid"
@@ -30,4 +33,21 @@ func MidtransCreateTransaction() interface{} {
 	}
 	snapResp, _ := s.CreateTransaction(req)
 	return snapResp
+}
+
+func GenerateRandomString() string {
+	rand.Seed(time.Now().Unix())
+
+	str := "AsDfGhBvCX123456MnBp"
+
+	shuff := []rune(str)
+
+	// Shuffling the string
+	rand.Shuffle(len(shuff), func(i, j int) {
+		shuff[i], shuff[j] = shuff[j], shuff[i]
+	})
+
+	// Displaying the random string
+	// fmt.Println(string(shuff))
+	return string(shuff)
 }
