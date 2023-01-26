@@ -48,7 +48,7 @@ func (cc *cartController) CartList() echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
 		}
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"data":    res,
+			"data":    GetCartResp(res),
 			"message": "success show cart",
 		})
 	}
