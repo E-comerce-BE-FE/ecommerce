@@ -13,15 +13,38 @@ type TransactionService struct {
 	mock.Mock
 }
 
-// CreateTransaction provides a mock function with given fields: token
-func (_m *TransactionService) CreateTransaction(token interface{}) (transaction.Core, error) {
-	ret := _m.Called(token)
+// CreateTransaction provides a mock function with given fields: token, paymentLink, codeTrans
+func (_m *TransactionService) CreateTransaction(token interface{}, paymentLink string, codeTrans string) (transaction.Core, error) {
+	ret := _m.Called(token, paymentLink, codeTrans)
 
 	var r0 transaction.Core
-	if rf, ok := ret.Get(0).(func(interface{}) transaction.Core); ok {
-		r0 = rf(token)
+	if rf, ok := ret.Get(0).(func(interface{}, string, string) transaction.Core); ok {
+		r0 = rf(token, paymentLink, codeTrans)
 	} else {
 		r0 = ret.Get(0).(transaction.Core)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(interface{}, string, string) error); ok {
+		r1 = rf(token, paymentLink, codeTrans)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// TransactionHistory provides a mock function with given fields: token
+func (_m *TransactionService) TransactionHistory(token interface{}) ([]transaction.Core, error) {
+	ret := _m.Called(token)
+
+	var r0 []transaction.Core
+	if rf, ok := ret.Get(0).(func(interface{}) []transaction.Core); ok {
+		r0 = rf(token)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]transaction.Core)
+		}
 	}
 
 	var r1 error
@@ -34,20 +57,20 @@ func (_m *TransactionService) CreateTransaction(token interface{}) (transaction.
 	return r0, r1
 }
 
-// UpdateTransaction provides a mock function with given fields:
-func (_m *TransactionService) UpdateTransaction() (transaction.Core, error) {
-	ret := _m.Called()
+// UpdateTransaction provides a mock function with given fields: codeTrans
+func (_m *TransactionService) UpdateTransaction(codeTrans string) (transaction.Core, error) {
+	ret := _m.Called(codeTrans)
 
 	var r0 transaction.Core
-	if rf, ok := ret.Get(0).(func() transaction.Core); ok {
-		r0 = rf()
+	if rf, ok := ret.Get(0).(func(string) transaction.Core); ok {
+		r0 = rf(codeTrans)
 	} else {
 		r0 = ret.Get(0).(transaction.Core)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(codeTrans)
 	} else {
 		r1 = ret.Error(1)
 	}

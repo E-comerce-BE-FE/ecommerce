@@ -28,6 +28,22 @@ func (_m *TransactionHandler) CreateTransaction() echo.HandlerFunc {
 	return r0
 }
 
+// TransactionHistory provides a mock function with given fields:
+func (_m *TransactionHandler) TransactionHistory() echo.HandlerFunc {
+	ret := _m.Called()
+
+	var r0 echo.HandlerFunc
+	if rf, ok := ret.Get(0).(func() echo.HandlerFunc); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(echo.HandlerFunc)
+		}
+	}
+
+	return r0
+}
+
 // UpdateTransaction provides a mock function with given fields:
 func (_m *TransactionHandler) UpdateTransaction() echo.HandlerFunc {
 	ret := _m.Called()
