@@ -21,3 +21,11 @@ func CToResponse(data cart.Core) CartResponse {
 		ProductImage: data.ProductImage,
 	}
 }
+
+func GetCartResp(data []cart.Core) []CartResponse {
+	res := []CartResponse{}
+	for _, v := range data {
+		res = append(res, CToResponse(v))
+	}
+	return res
+}
