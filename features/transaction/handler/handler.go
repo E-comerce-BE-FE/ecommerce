@@ -20,7 +20,11 @@ func New(ts transaction.TransactionService) transaction.TransactionHandler {
 // CreateTransaction implements transaction.TransactionHandler
 func (tc *transactionController) CreateTransaction() echo.HandlerFunc {
 	return func(c echo.Context) error {
-
+		input := TransactionRequest{}
+		err := c.Bind(&input)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "wrong input format"})
+		}
 		// log.Println(snapResp.RedirectURL)
 		// return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
 

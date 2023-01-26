@@ -96,3 +96,17 @@ func (cc *cartController) UpdateQty() echo.HandlerFunc {
 		})
 	}
 }
+
+// CartResult implements cart.CartHandler
+func (cc *cartController) CartResult() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		res, err := cc.srv.CartResult(c.Get("user"))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
+		}
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"data":    res,
+			"message": "success",
+		})
+	}
+}

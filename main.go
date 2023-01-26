@@ -69,6 +69,7 @@ func main() {
 	e.GET("/carts", cHdl.CartList(), middleware.JWT([]byte(config.JWTKey)))
 	e.PUT("/carts/:id", cHdl.UpdateQty(), middleware.JWT([]byte(config.JWTKey)))
 	e.DELETE("/carts/:id", cHdl.Delete(), middleware.JWT([]byte(config.JWTKey)))
+	e.GET("/carts/result", cHdl.CartResult(), middleware.JWT([]byte(config.JWTKey)))
 
 	//Transaction
 	e.POST("/transactions", tHdl.CreateTransaction(), middleware.JWT([]byte(config.JWTKey)))

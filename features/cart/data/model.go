@@ -12,6 +12,7 @@ type Cart struct {
 	Amount    int
 	UserId    uint
 	ProductId uint
+	User      User
 }
 
 type Product struct {
@@ -26,6 +27,8 @@ type Product struct {
 type User struct {
 	gorm.Model
 	Name      string
+	Email     string
+	Phone     string
 	Address   string
 	UserImage string
 }
@@ -35,6 +38,13 @@ func DataToCore(data Cart) cart.Core {
 		ID:     data.ID,
 		Qty:    data.Qty,
 		Amount: data.Amount,
+		User: cart.User{
+			ID:      data.User.ID,
+			Name:    data.User.Name,
+			Email:   data.User.Email,
+			Phone:   data.User.Phone,
+			Address: data.User.Address,
+		},
 	}
 }
 
