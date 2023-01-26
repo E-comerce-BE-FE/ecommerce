@@ -27,6 +27,10 @@ func (cq *cartQuery) AddToCart(userID uint, productID uint, add cart.Core) (cart
 		log.Println("query error", err.Error())
 		return cart.Core{}, errors.New("server error")
 	}
+	if prd.Stock <= 0 {
+		log.Println("query error", err.Error())
+		return cart.Core{}, errors.New("product not available")
+	}
 	cnv := CoreToData(add)
 	cnv.ProductId = prd.ID
 	cnv.UserId = userID
