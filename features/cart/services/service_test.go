@@ -217,3 +217,71 @@ func TestUpdateQty(t *testing.T) {
 		data.AssertExpectations(t)
 	})
 }
+
+func TestCartResult(t *testing.T) {
+	data := mocks.NewCartData(t)
+	resData := []cart.Core{
+		{
+			ID:          1,
+			ProductName: "Freshtea",
+			Seller:      "griffin",
+			Qty:         1,
+			Amount:      5000,
+		},
+	}
+
+	t.Run("Success show cart", func(t *testing.T) {
+		data.On("CartResult", uint(1)).Return(resData, nil).Once()
+
+		srv := New(data)
+		_, token := helper.GenerateToken(1)
+		useToken := token.(*jwt.Token)
+		useToken.Valid = true
+		res, err := srv.CartResult(useToken)
+		assert.Nil(t, err)
+		assert.NotEmpty(t, res)
+		data.AssertExpectations(t)
+	})
+
+	t.Run("Data not found", func(t *testing.T) {
+		data.On("CartResult", uint(1)).Return([]cart.Core{}, errors.New("data not found")).Once()
+
+		srv := New(data)
+		_, token := helper.GenerateToken(1)
+		useToken := token.(*jwt.Token)
+		useToken.Valid = true
+		res, err := srv.CartResult(useToken)
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "error")
+		assert.Empty(t, res)
+		data.AssertExpectations(t)
+	})
+
+	t.Run("Trouble in server", func(t *testing.T) {
+		data.On("CartResult", uint(1)).Return([]cart.Core{}, errors.New("server error")).Once()
+
+		srv := New(data)
+		_, token := helper.GenerateToken(1)
+		useToken := token.(*jwt.Token)
+		useToken.Valid = true
+		res, err := srv.CartResult(useToken)
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "error")
+		assert.Empty(t, res)
+		data.AssertExpectations(t)
+	})
+
+	t.Run("JWT not valid", func(t *testing.T) {
+		data.On("CartResult", uint(1)).Return([]cart.Core{}, errors.New("jwt not valid")).Once()
+
+		srv := New(data)
+		_, token := helper.GenerateToken(1)
+		useToken := token.(*jwt.Token)
+		useToken.Valid = true
+		res, err := srv.CartResult(useToken)
+		assert.NotNil(t, err)
+		assert.Empty(t, res)
+		assert.ErrorContains(t, err, "error")
+		data.AssertExpectations(t)
+	})
+}
