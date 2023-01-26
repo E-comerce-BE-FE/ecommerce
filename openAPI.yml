@@ -639,7 +639,7 @@ paths:
     post:
       tags:
         - transactions
-      description: feature for user create new cart
+      description: feature for user create new transaction
       security:
         - JWTAuth: []
       requestBody:
@@ -648,10 +648,22 @@ paths:
             schema:
               type: object
               properties:
-                cart_id:
+                name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  type: string
+                subtotal:
                   type: integer
             example:
-              cart_id: 1
+              name: fauzilax
+              email: fzx@gmail.com
+              phone: "08123"
+              address: bdg
+              sub_total: 50000
       responses:
         201: 
           description: "success added transaction"
@@ -701,7 +713,7 @@ paths:
       tags:
         - transactions
       summary: transaction history
-      description: feature for user create new cart
+      description: feature for show history transaction
       security:
         - JWTAuth: []
       responses:

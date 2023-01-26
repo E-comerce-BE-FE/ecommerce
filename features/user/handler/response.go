@@ -6,17 +6,24 @@ import (
 	"strings"
 )
 
+type RegResp struct {
+}
+
+func ToRegResp(data user.Core) RegResp {
+	return RegResp{}
+}
+
 type UserReponse struct {
-	ID        uint   `json:"id"`
-	Name      string `json:"name"`
-	UserImage string `json:"user_image"`
+	ID    uint   `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
 func ToResponse(data user.Core) UserReponse {
 	return UserReponse{
-		ID:        data.ID,
-		Name:      data.Name,
-		UserImage: data.UserImage,
+		ID:    data.ID,
+		Name:  data.Name,
+		Email: data.Email,
 	}
 }
 
