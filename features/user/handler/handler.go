@@ -2,6 +2,7 @@ package handler
 
 import (
 	"ecommerce/features/user"
+	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -47,10 +48,10 @@ func (uc *userControll) Register() echo.HandlerFunc {
 
 		res, err := uc.srv.Register(*ReqToCore(input))
 		if err != nil {
-			return c.JSON(PrintErrorResponse(err.Error()))
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
 		}
-
-		return c.JSON(PrintSuccessReponse(http.StatusCreated, "success register data", ToResponse(res)))
+		log.Println(res)
+		return c.JSON(http.StatusCreated, map[string]interface{}{"message": "success create account"})
 	}
 }
 func (uc *userControll) Profile() echo.HandlerFunc {
