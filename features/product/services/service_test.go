@@ -124,7 +124,7 @@ func TestDelete(t *testing.T) {
 	})
 
 	t.Run("Data not found", func(t *testing.T) {
-		data.On("Delete", uint(1), uint(2)).Return(errors.New("not found")).Once()
+		data.On("Delete", uint(1), uint(2)).Return(errors.New("product cannot deleted")).Once()
 
 		srv := New(data)
 		_, token := helper.GenerateToken(1)
@@ -132,7 +132,7 @@ func TestDelete(t *testing.T) {
 		useToken.Valid = true
 		err := srv.Delete(useToken, 2)
 		assert.NotNil(t, err)
-		assert.ErrorContains(t, err, "error")
+		assert.ErrorContains(t, err, "not allowed")
 		data.AssertExpectations(t)
 	})
 
@@ -239,5 +239,27 @@ func TestProductDetail(t *testing.T) {
 		assert.Empty(t, res)
 		assert.ErrorContains(t, err, "error")
 		data.AssertExpectations(t)
+	})
+}
+
+func TestSearching(t *testing.T) {
+	repo := mocks.NewProductData(t)
+	resData := []product.Core{{ID: 1, ProductName: "Lifebuoy", Price: 4000}}
+	t.Run("success Found", func(t *testing.T) {
+		repo.On("Searching", "eko").Return(resData, nil)
+		srv := New(repo)
+		res, err := srv.Searching("eko")
+		assert.Nil(t, err)
+		assert.Equal(t, resData[0].ProductName, res[0].ProductName)
+		repo.AssertExpectations(t)
+	})
+	t.Run("Not found", func(t *testing.T) {
+		repo.On("Searching", "").Return([]product.Core{}, errors.New("no user found"))
+		srv := New(repo)
+		res, err := srv.Searching("")
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "error")
+		assert.Equal(t, []product.Core{}, res)
+		repo.AssertExpectations(t)
 	})
 }

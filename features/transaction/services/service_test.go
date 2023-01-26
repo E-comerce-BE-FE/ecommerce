@@ -109,3 +109,56 @@ func TestTransactionHistory(t *testing.T) {
 		data.AssertExpectations(t)
 	})
 }
+
+func TestCancelTransaction(t *testing.T) {
+	data := mocks.NewTransactionData(t)
+	t.Run("Success Cancel", func(t *testing.T) {
+		data.On("CancelTransaction", uint(1), uint(1)).Return(nil).Once()
+		srv := New(data)
+		_, token := helper.GenerateToken(1)
+		useToken := token.(*jwt.Token)
+		useToken.Valid = true
+		err := srv.CancelTransaction(useToken, uint(1))
+		assert.Nil(t, err)
+		data.AssertExpectations(t)
+	})
+	t.Run("Cancel Transaction Fail", func(t *testing.T) {
+		data.On("CancelTransaction", uint(3), uint(1)).Return(errors.New("server error")).Once()
+		srv := New(data)
+		_, token := helper.GenerateToken(3)
+		useToken := token.(*jwt.Token)
+		useToken.Valid = true
+		err := srv.CancelTransaction(useToken, uint(1))
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "server")
+		data.AssertExpectations(t)
+	})
+}
+
+func TestTransactionDetail(t *testing.T) {
+	data := mocks.NewTransactionData(t)
+	resData := transaction.Core{ID: 1, TransactionName: "product-shoping", SubTotal: 35000}
+	t.Run("Success show transaction detail", func(t *testing.T) {
+		data.On("TransactionDetail", uint(1), uint(1)).Return(resData, nil).Once()
+		srv := New(data)
+		_, token := helper.GenerateToken(1)
+		useToken := token.(*jwt.Token)
+		useToken.Valid = true
+		res, err := srv.TransactionDetail(useToken, uint(1))
+		assert.Nil(t, err)
+		assert.Equal(t, res, resData)
+		data.AssertExpectations(t)
+	})
+	t.Run("Show Transaction detail Fail", func(t *testing.T) {
+		data.On("TransactionDetail", uint(1), uint(1)).Return(transaction.Core{}, errors.New("server error")).Once()
+		srv := New(data)
+		_, token := helper.GenerateToken(1)
+		useToken := token.(*jwt.Token)
+		useToken.Valid = true
+		res, err := srv.TransactionDetail(useToken, uint(1))
+		assert.NotNil(t, err)
+		assert.ErrorContains(t, err, "server")
+		assert.Equal(t, transaction.Core{}, res)
+		data.AssertExpectations(t)
+	})
+}

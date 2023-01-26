@@ -106,18 +106,15 @@ func (uq *userQuery) Update(id uint, updateData user.Core) (user.Core, error) {
 
 func (uq *userQuery) Delete(id uint) error {
 	qry := uq.db.Delete(&User{}, id)
-
-	affrows := qry.RowsAffected
-	if affrows == 0 {
-		log.Println("no rows affected")
-		return errors.New("no data deleted")
+	rowAffect := qry.RowsAffected
+	if rowAffect <= 0 {
+		log.Println("no data processed")
+		return errors.New("no user has delete")
 	}
-
 	err := qry.Error
 	if err != nil {
-		log.Println("delete query error")
-		return errors.New("cannot delete data, data not found")
+		log.Println("delete query error", err.Error())
+		return errors.New("delete account fail")
 	}
-
 	return nil
 }

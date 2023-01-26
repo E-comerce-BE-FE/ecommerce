@@ -29,6 +29,7 @@ type ProductHandler interface {
 	Delete() echo.HandlerFunc
 	AllProduct() echo.HandlerFunc
 	ProductDetail() echo.HandlerFunc
+	Searching() echo.HandlerFunc
 }
 
 type ProductService interface {
@@ -37,6 +38,7 @@ type ProductService interface {
 	Delete(token interface{}, productID uint) error
 	AllProduct() ([]Core, error)
 	ProductDetail(productID uint) (Core, error)
+	Searching(quote string) ([]Core, error)
 }
 
 type ProductData interface {
@@ -45,4 +47,5 @@ type ProductData interface {
 	Delete(userID uint, productID uint) error
 	AllProduct() ([]Core, error)
 	ProductDetail(productID uint) (Core, error)
+	Searching(quote string) ([]Core, error)
 }

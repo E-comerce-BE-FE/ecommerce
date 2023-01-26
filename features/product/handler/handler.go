@@ -156,3 +156,24 @@ func (hc *handlerController) ProductDetail() echo.HandlerFunc {
 		})
 	}
 }
+
+// Searching implements product.ProductHandler
+func (hc *handlerController) Searching() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		quotes := c.QueryParam("q")
+		log.Println(quotes)
+		res, err := hc.srv.Searching(quotes)
+		if err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "user not found"})
+		}
+		result := []Search{}
+		for i := 0; i < len(res); i++ {
+			result = append(result, SearchResponse(res[i]))
+		}
+
+		return c.JSON(http.StatusCreated, map[string]interface{}{
+			"data":    result,
+			"message": "searching success",
+		})
+	}
+}

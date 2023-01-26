@@ -112,3 +112,21 @@ func (pq *productQry) ProductDetail(productID uint) (product.Core, error) {
 
 	return result, nil
 }
+
+// Searching implements product.ProductData
+func (pq *productQry) Searching(quote string) ([]product.Core, error) {
+	find := []Product{}
+	err := pq.db.Where("product_name LIKE ?", "%"+quote+"%").Or("price LIKE ?", "%"+quote+"%").Find(&find).Error
+	if err != nil {
+		log.Println("no data processed", err.Error())
+		return []product.Core{}, errors.New("no user found")
+	}
+	result := []product.Core{}
+	for i := 0; i < len(find); i++ {
+		result = append(result, DataToCore(find[i]))
+		result[i].User.ID = find[i].User.ID
+		result[i].User.Name = find[i].User.Name
+		result[i].User.Address = find[i].User.Address
+	}
+	return result, nil
+}

@@ -113,6 +113,29 @@ func (_m *ProductData) ProductDetail(productID uint) (product.Core, error) {
 	return r0, r1
 }
 
+// Searching provides a mock function with given fields: quote
+func (_m *ProductData) Searching(quote string) ([]product.Core, error) {
+	ret := _m.Called(quote)
+
+	var r0 []product.Core
+	if rf, ok := ret.Get(0).(func(string) []product.Core); ok {
+		r0 = rf(quote)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]product.Core)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(quote)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 type mockConstructorTestingTNewProductData interface {
 	mock.TestingT
 	Cleanup(func())

@@ -117,16 +117,13 @@ func (uuc *userUseCase) Update(token interface{}, fileData multipart.FileHeader,
 
 func (uuc *userUseCase) Delete(token interface{}) error {
 	id := helper.ExtractToken(token)
+	// if id <= 0 {
+	// 	return errors.New("id not found, server error")
+	// }
 	err := uuc.qry.Delete(uint(id))
 	if err != nil {
-		msg := ""
-		if strings.Contains(err.Error(), "not found") {
-			msg = "data not found"
-		} else {
-			msg = "server error"
-		}
-		return errors.New(msg)
+		log.Println("query error", err.Error())
+		return errors.New("query error, delete account fail")
 	}
-
 	return nil
 }

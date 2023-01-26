@@ -67,7 +67,7 @@ func (psc *productServiceCase) Delete(token interface{}, productID uint) error {
 	if err != nil {
 		log.Println("query error")
 		if strings.Contains(err.Error(), "cannot") {
-			return errors.New("you are not allowed delete other people content")
+			return errors.New("you are not allowed delete other people product")
 		}
 		return errors.New("server error")
 	}
@@ -108,6 +108,16 @@ func (psc *productServiceCase) ProductDetail(productID uint) (product.Core, erro
 	if err != nil {
 		log.Println("query error", err.Error())
 		return product.Core{}, errors.New("query error cannot, problem with server")
+	}
+	return res, nil
+}
+
+// Searching implements product.ProductService
+func (psc *productServiceCase) Searching(quote string) ([]product.Core, error) {
+	res, err := psc.qry.Searching(quote)
+	if err != nil {
+		log.Println("query error", err.Error())
+		return []product.Core{}, errors.New("server error")
 	}
 	return res, nil
 }

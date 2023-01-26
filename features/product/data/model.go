@@ -16,6 +16,7 @@ type Product struct {
 	UserId       uint
 	User         User
 }
+
 type User struct {
 	ID        uint
 	Name      string
@@ -43,6 +44,6 @@ func CoreToData(core product.Core) Product {
 		Price:        core.Price,
 		Stock:        core.Stock,
 		Description:  core.Description,
-		User:         User(core.User),
+		User:         User{},
 	}
 }

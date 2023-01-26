@@ -105,13 +105,14 @@ func (uc *userControll) Update() echo.HandlerFunc {
 
 func (uc *userControll) Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		token := c.Get("user")
-
-		err := uc.srv.Delete(token)
+		err := uc.srv.Delete(c.Get("user"))
 		if err != nil {
-			return c.JSON(PrintErrorResponse(err.Error()))
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"message": "internal server error, account fail to delete",
+			})
 		}
-
-		return c.JSON(http.StatusOK, map[string]interface{}{"message": "success delete profile"})
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "success delete profile",
+		})
 	}
 }

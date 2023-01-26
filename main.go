@@ -63,6 +63,7 @@ func main() {
 	e.GET("/products/:id", pHdl.ProductDetail())
 	e.PUT("/products/:id", pHdl.EditProduct(), middleware.JWT([]byte(config.JWTKey)))
 	e.DELETE("/products/:id", pHdl.Delete(), middleware.JWT([]byte(config.JWTKey)))
+	e.GET("/search", pHdl.Searching())
 
 	//Cart
 	e.POST("/carts", cHdl.AddToCart(), middleware.JWT([]byte(config.JWTKey)))

@@ -73,3 +73,23 @@ func GetAllProductResp(data []product.Core) []GetAllResp {
 	}
 	return res
 }
+
+type Search struct {
+	ID           uint   `json:"id"`
+	ProductName  string `json:"product_name"`
+	ProductImage string `json:"product_image"`
+	Price        int    `json:"price"`
+	Stock        int    `json:"stock"`
+	Description  string `json:"description"`
+}
+
+func SearchResponse(data product.Core) Search {
+	return Search{
+		ID:           data.ID,
+		ProductName:  data.ProductName,
+		ProductImage: data.ProductImage,
+		Price:        data.Price,
+		Stock:        data.Stock,
+		Description:  data.Description,
+	}
+}
