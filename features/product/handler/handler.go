@@ -2,6 +2,7 @@ package handler
 
 import (
 	"ecommerce/features/product"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -52,9 +53,9 @@ func (hc *handlerController) AddProduct() echo.HandlerFunc {
 				return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
 			}
 		}
-		// log.Println(res)
+		log.Println(res)
 		return c.JSON(http.StatusCreated, map[string]interface{}{
-			"data":    res,
+			// "data":    res,
 			"message": "success add product",
 		})
 	}
@@ -132,9 +133,9 @@ func (hc *handlerController) EditProduct() echo.HandlerFunc {
 				return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
 			}
 		}
-		// log.Println(res)
+		log.Println(res)
 		return c.JSON(http.StatusCreated, map[string]interface{}{
-			"data":    res,
+			// "data":    res,
 			"message": "success change product data",
 		})
 	}

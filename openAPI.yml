@@ -237,7 +237,7 @@ paths:
               schema:
                 type: object
                 example:
-                  message: "delete data user success"
+                  message: "success delete profile"
         400:
           $ref: '#/components/responses/400'
         500:
@@ -353,8 +353,9 @@ paths:
                     id: 1
                     product_name: "Pepsodent"
                     stock: 30
-                    price: 12000,
+                    price: 12000
                     product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg"
+                    description: "jangan lupa menggosok gigi pada malam hari menggunakan pepsodent"
                     user: {
                       user_id: 2,
                       name: "Griffin",
@@ -410,13 +411,7 @@ paths:
               schema:
                 type: object
               example:
-                data:
-                  product_name: "Cheetos"
-                  stock: 50
-                  price: 5000
-                  description: "Dengan rasa jagung alami membuat makanan menjadi gurih dan enak untuk dinikmati"
-                  product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/53264112-73f6-4da4-8cd2-dcdab668dfb9.jpg"
-                message: "update product success"
+                message: "success change product data"
         400:
           $ref: '#/components/responses/400'
         500:
@@ -443,7 +438,7 @@ paths:
               schema:
                 type: object
                 example:
-                  message: "delete product success"
+                  message: "success delete product"
         400:
           $ref: '#/components/responses/400'
         500:
@@ -662,7 +657,6 @@ paths:
               name: fauzilax
               email: fzx@gmail.com
               phone: "08123"
-              address: bdg
               sub_total: 50000
       responses:
         201: 
