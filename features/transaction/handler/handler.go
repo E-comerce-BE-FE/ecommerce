@@ -5,6 +5,7 @@ import (
 	"ecommerce/helper"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/midtrans/midtrans-go"
@@ -111,6 +112,35 @@ func (tc *transactionController) TransactionHistory() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"data":    res,
 			"message": "show all transaction success",
+		})
+	}
+}
+
+// CancelTransaction implements transaction.TransactionHandler
+func (tc *transactionController) CancelTransaction() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		trsID := c.Param("id")
+		transactionID, _ := strconv.Atoi(trsID)
+		err := tc.srv.CancelTransaction(c.Get("user"), uint(transactionID))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
+		}
+		return c.JSON(http.StatusOK, map[string]interface{}{"message": "transaction success canceled"})
+	}
+}
+
+// TransactionDetail implements transaction.TransactionHandler
+func (tc *transactionController) TransactionDetail() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		trsID := c.Param("id")
+		transactionID, _ := strconv.Atoi(trsID)
+		res, err := tc.srv.TransactionDetail(c.Get("user"), uint(transactionID))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
+		}
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"data":    res,
+			"message": "show transaction item success",
 		})
 	}
 }

@@ -14,6 +14,7 @@ type Transaction struct {
 	PaymentLink     string
 	UserId          uint
 	Status          string
+	TransactionItem []TransactionItem
 }
 
 type TransactionItem struct {
@@ -40,6 +41,15 @@ type Core struct {
 	Status          string
 	TransactionName string
 	TransactionCode string
+}
+
+type Product struct {
+	gorm.Model
+	ProductName  string
+	ProductImage string
+	Price        int
+	Stock        int
+	Description  string
 }
 
 func DataToCore(data Transaction) transaction.Core {
