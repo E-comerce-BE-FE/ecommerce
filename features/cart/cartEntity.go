@@ -5,21 +5,21 @@ import (
 )
 
 type Core struct {
-	ID           uint
-	ProductName  string
-	ProductImage string
-	Seller       string
-	Qty          int
-	Amount       int
-	User         User
+	ID           uint   `json:"id"`
+	ProductName  string `json:"product_name"`
+	ProductImage string `json:"product_image"`
+	Seller       string `json:"seller"`
+	Qty          int    `json:"quantity"`
+	Amount       int    `json:"amount"`
+	User         User   `json:"user"`
 }
 
 type User struct {
-	ID      uint
-	Name    string
-	Email   string
-	Phone   string
-	Address string
+	ID      uint   `json:"id"`
+	Name    string `json:"name"`
+	Email   string `json:"email"`
+	Phone   string `json:"phone"`
+	Address string `json:"address"`
 }
 
 type CartHandler interface {
