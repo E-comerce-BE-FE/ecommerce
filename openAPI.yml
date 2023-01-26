@@ -472,7 +472,7 @@ paths:
                   message:
                     type: string
               example:
-                message: "Success added"
+                message: "success add to cart"
         400:
           $ref: '#/components/responses/400'
         500:
@@ -545,7 +545,7 @@ paths:
               schema:
                 type: object
               example:
-                message: update quantity succes
+                message: success update quantity
         400:
           $ref: '#/components/responses/400'
         500:
@@ -573,7 +573,7 @@ paths:
               schema:
                 type: object
                 example:
-                  message: "delete cart success"
+                  message: "success delete cart"
         400:
           $ref: '#/components/responses/400'
         500:
@@ -602,11 +602,11 @@ paths:
                   amount: 12000,
                   product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg",
                   user: {
+                    id: 1,
                     name: "fauzilax",
                     email: "fauzi@gmail.com",
                     phone: "08123",
-                    address: "jl. satuduatiga",
-                    user_image:
+                    address: "jl. satuduatiga"
                   }
                   },
                   {
@@ -617,11 +617,11 @@ paths:
                   amount: 10000,
                   product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg",
                   user: {
+                    id: 1,
                     name: "fauzilax",
                     email: "fauzi@gmail.com",
                     phone: "08123",
-                    address: "jl. satuduatiga",
-                    user_image:
+                    address: "jl. satuduatiga"
                   }
                   }]
                 message: "Success show cart"

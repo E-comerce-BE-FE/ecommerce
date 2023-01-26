@@ -30,6 +30,7 @@ func DataToCore(data Product) product.Core {
 		ProductImage: data.ProductImage,
 		Price:        data.Price,
 		Stock:        data.Stock,
+		Description:  data.Description,
 		User:         product.UserCore{},
 	}
 }
@@ -41,6 +42,7 @@ func CoreToData(core product.Core) Product {
 		ProductImage: core.ProductImage,
 		Price:        core.Price,
 		Stock:        core.Stock,
+		Description:  core.Description,
 		User:         User(core.User),
 	}
 }

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"ecommerce/features/cart"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -31,8 +32,9 @@ func (cc *cartController) AddToCart() echo.HandlerFunc {
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]interface{}{"message": "internal server error"})
 		}
+		log.Println(res)
 		return c.JSON(http.StatusCreated, map[string]interface{}{
-			"data":    res,
+			// "data":    res,
 			"message": "success add to cart",
 		})
 	}
@@ -47,7 +49,7 @@ func (cc *cartController) CartList() echo.HandlerFunc {
 		}
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"data":    res,
-			"message": "success",
+			"message": "success show cart",
 		})
 	}
 }
@@ -67,7 +69,7 @@ func (cc *cartController) Delete() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"message": "success delete product",
+			"message": "success delete cart",
 		})
 	}
 }
@@ -89,10 +91,10 @@ func (cc *cartController) UpdateQty() echo.HandlerFunc {
 			// if strings.Contains(err.Error(), "format") {
 			// }
 		}
-		// log.Println(res)
+		log.Println(res)
 		return c.JSON(http.StatusCreated, map[string]interface{}{
-			"data":    res,
-			"message": "success change quantity data",
+			// "data":    res,
+			"message": "success update quantity",
 		})
 	}
 }
@@ -106,7 +108,7 @@ func (cc *cartController) CartResult() echo.HandlerFunc {
 		}
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"data":    res,
-			"message": "success",
+			"message": "success show cart",
 		})
 	}
 }
