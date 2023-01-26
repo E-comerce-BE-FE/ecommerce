@@ -81,7 +81,7 @@ func (pq *productQry) EditProduct(userID uint, productID uint, editedProduct pro
 		log.Println("product not found", err.Error())
 		return product.Core{}, errors.New("product cannot edited")
 	}
-	res := Product{}
+	res := CoreToData(editedProduct)
 	qry := pq.db.Where("user_id=? AND id=?", userID, productID).Updates(&res)
 	if qry.RowsAffected <= 0 {
 		log.Println("update error : no rows affected")

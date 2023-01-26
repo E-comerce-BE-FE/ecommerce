@@ -65,9 +65,9 @@ func (uq *userQuery) Profile(userID uint) (interface{}, error) {
 	result := make(map[string]interface{})
 	result["id"] = res.ID
 	result["name"] = res.Name
-	// result["email"] = res.Email
-	// result["phone"] = res.Phone
-	// result["address"] = res.Address
+	result["email"] = res.Email
+	result["phone"] = res.Phone
+	result["address"] = res.Address
 	result["user_image"] = res.UserImage
 	result["product"] = make([]map[string]interface{}, len(res.Product))
 
@@ -106,7 +106,6 @@ func (uq *userQuery) Update(id uint, updateData user.Core) (user.Core, error) {
 
 func (uq *userQuery) Delete(id uint) error {
 	qry := uq.db.Delete(&User{}, id)
-	err := qry.Error
 
 	affrows := qry.RowsAffected
 	if affrows == 0 {
@@ -114,6 +113,7 @@ func (uq *userQuery) Delete(id uint) error {
 		return errors.New("no data deleted")
 	}
 
+	err := qry.Error
 	if err != nil {
 		log.Println("delete query error")
 		return errors.New("cannot delete data, data not found")

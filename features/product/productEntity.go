@@ -17,7 +17,7 @@ type Core struct {
 }
 
 type UserCore struct {
-	ID        uint   `json:"id"`
+	ID        uint   `json:"user_id"`
 	Name      string `json:"name"`
 	UserImage string `json:"user_image"`
 	Address   string `json:"address"`

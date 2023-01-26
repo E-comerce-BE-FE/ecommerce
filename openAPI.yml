@@ -111,7 +111,7 @@ paths:
                   name: "Fauzi Sofyan"
                   email: "fauzilax@gmail.com"
                   token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJ1c2VySUQiOjR9.QTZxERh4CwC_UnL_eJvTi_A_qdLeBZ-IjR4nqoxjodk"
-                message: "login success"
+                message: "success login"
         400:
           $ref: '#/components/responses/400'
         500:
@@ -136,7 +136,10 @@ paths:
                   data:
                     id: 2
                     name: "Griffin"
-                    profilepicture: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673881607/go-cloudinary/llhltxp55elirjkmlyld.png"
+                    email: "grf29@gmail.com"
+                    address: "mks"
+                    phone: "08123"
+                    user_image: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673881607/go-cloudinary/llhltxp55elirjkmlyld.png"
                     product: [{
                       product_id: 1,
                       product_name: "Pepsodent",
@@ -214,9 +217,9 @@ paths:
                   email: "griffin@gmail.com"
                   phone: "08123456"
                   address: "Makassar"
-                  password: "123"
-                  image: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673881607/go-cloudinary/llhltxp55elirjkmlyld.png"
-                message: "update profile success"
+                  password: ""
+                  user_image: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673881607/go-cloudinary/llhltxp55elirjkmlyld.png"
+                message: "success update profile"
         400:
           $ref: '#/components/responses/400'
         500:
@@ -289,7 +292,7 @@ paths:
                   message:
                     type: string
               example:
-                message: "Success create account"
+                message: "Success add product"
         400:
           $ref: '#/components/responses/400'
         500:
@@ -312,6 +315,7 @@ paths:
                     product_name: "Pepsodent",
                     address: "Makassar",
                     price: 12000,
+                    description: "untuk sikat gigi",
                     product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg",
                     },
                     {
@@ -319,6 +323,7 @@ paths:
                     product_name: "Lifeboy",
                     address: "Makassar",
                     price: 10000,
+                    description: "untuk mandi",
                     product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg",
                     }]
                   message: "success show all product"
@@ -360,7 +365,7 @@ paths:
                       user_id: 2,
                       name: "Griffin",
                       address: "Makassar",
-                      profilepicture: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673881607/go-cloudinary/llhltxp55elirjkmlyld.png"
+                      user_image: "https://res.cloudinary.com/dbg0177wd/image/upload/v1673881607/go-cloudinary/llhltxp55elirjkmlyld.png"
                     }
     put:
       tags:
@@ -671,25 +676,25 @@ paths:
               example:
                 data: [{
                   id: 1,
-                  product_id: 1,
                   transaction_name: product-shopping,
                   total_product: 3,
                   subtotal: 36000,
                   create_at: "23-01-2023 22:10:15",
                   status: "pending",
-                  transaction_code: "8d19sn6dt15"
+                  transaction_code: "GROUP-3-ORDER-ID-vGp51BAM32XhBs6CD4fn",
+                  payment_link: "https://app.sandbox.midtrans.com/snap/v3/redirection/3a488e47-2e71-45b9-935a-2c34a109636e",
                   },
                   {
                   id: 2,
-                  product_id: 2,
                   transaction_name: product-shopping,
                   total_product: 2,
                   subtotal: 20000,
                   create_at: "23-01-2023 22:10:15",
                   status: "pending",
-                  transaction_code: "8d19sn6dt15"
+                  transaction_code: "GROUP-3-ORDER-ID-vGp51BAM32XhBs6CD4fn",
+                  payment_link: "https://app.sandbox.midtrans.com/snap/v3/redirection/3a488e47-2e71-45b9-935a-2c34a109636e",
                   }]
-                message: "Success added"
+                message: "transaction success created"
                 # id: 1
                 #   seller: "Griffin"
                 #   total_product: 5
@@ -723,32 +728,67 @@ paths:
               example:
                 data: [{
                   id: 1,
-                  seller: "Griffin",
                   total_product: 5,
                   subtotal: 56000,
                   status: "pending",
                   create_at: "23-01-2023 22:10:15",
-                  transaction_code: "isj82j1wd",
+                  transaction_code: "GROUP-3-ORDER-ID-vGp51BAM32XhBs6CD4fn",
+                  transaction_name: "product-shopping",
+                  payment_link: "https://app.sandbox.midtrans.com/snap/v3/redirection/3a488e47-2e71-45b9-935a-2c34a109636e",
                   },
                   {
                   id: 2,
-                  seller: "Griffin",
                   total_product: 10,
                   subtotal: 100000,
                   status: "success",
                   create_at: "23-01-2023 22:10:15",
-                  transaction_code: "isj82j1wd",
+                  transaction_code: "GROUP-3-ORDER-ID-vGp51BAM32XhBs6CD4fn",
+                  transaction_name: "product-shopping",
+                  payment_link: "https://app.sandbox.midtrans.com/snap/v3/redirection/3a488e47-2e71-45b9-935a-2c34a109636e",
                   },
                   {
                   id: 3,
-                  seller: "Griffin",
                   total_product: 5,
                   subtotal: 60000,
                   status: "cancelled",
                   create_at: "23-01-2023 22:10:15",
-                  transaction_code: "isj82j1wd",
+                  transaction_code: "GROUP-3-ORDER-ID-vGp51BAM32XhBs6CD4fn",
+                  transaction_name: "product-shopping",
+                  payment_link: "https://app.sandbox.midtrans.com/snap/v3/redirection/3a488e47-2e71-45b9-935a-2c34a109636e",
                   }]
-                message: "Success added"
+                message: "show all transaction success"
+        400:
+          $ref: '#/components/responses/400'
+        500:
+          $ref: '#/components/responses/500'
+
+    put:
+      tags:
+        - transactions
+      summary: transaction history
+      description: feature for show history transaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code_transaction:
+                  type: string
+            example:
+              code_transaction: "GROUP-3-ORDER-ID-vGp51BAM32XhBs6CD4fn"
+      responses:
+        200: 
+          description: "success show transaction"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "payment success updated"
         400:
           $ref: '#/components/responses/400'
         500:
@@ -781,22 +821,28 @@ paths:
                   message:
                     type: string
               example:
-                data: [{
+                data: {
                   transaction_id: 1,
-                  product_name: "Pepsodent",
-                  seller: "Griffin",
-                  quantity: 3,
-                  amount: 36000,
-                  product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg",
-                  },
-                  {
-                  transaction_id: 1,
-                  product_name: "Lifeboy",
-                  seller: "Griffin",
-                  quantity: 2,
-                  amount: 20000,
-                  product_image: "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg",
-                  }]
+                  total_product: 5,
+                  subtotal: 60000,
+                  status: "cancelled",
+                  create_at: "23-01-2023 22:10:15",
+                  transaction_code: "GROUP-3-ORDER-ID-vGp51BAM32XhBs6CD4fn",
+                  transaction_item: [{
+                    "id": 1,
+                    "product_name": "lifeboy",
+                    "qty": 1,
+                    "amount": 10000,
+                    "product_image": "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg"
+                    },
+                    {
+                    "id": 2,
+                    "product_name": "pepsodent",
+                    "qty": 1,
+                    "amount": 12000,
+                    "product_image": "https://fauziawsbucket.s3.ap-southeast-1.amazonaws.com/3c8d7d6f76fcae16c934ac00b305bb25.jpg"
+                    }]
+                    }
         400:
           $ref: '#/components/responses/400'
         500:
@@ -828,9 +874,7 @@ paths:
                   message:
                     type: string
               example:
-                data:
-                  transaction_status: success
-                message: "Update transaction status success"
+                message: "transaction success canceled"
 
 
 components:

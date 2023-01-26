@@ -1,5 +1,7 @@
 package handler
 
+import "ecommerce/features/product"
+
 // import "ecommerce/features/product"
 
 type CoreContent struct {
@@ -43,3 +45,31 @@ type AllContent struct {
 // 		Users:        CoreUser(data.Users),
 // 	}
 // }
+
+type GetAllResp struct {
+	ID            uint   `json:"id"`
+	ProductName   string `json:"product_name"`
+	Address       string `json:"address"`
+	Price         int    `json:"price"`
+	Description   string `json:"description"`
+	ProductImages string `json:"product_images"`
+}
+
+func ToResp(data product.Core) GetAllResp {
+	return GetAllResp{
+		ID:            data.ID,
+		ProductName:   data.ProductName,
+		Address:       data.User.Address,
+		Price:         data.Price,
+		Description:   data.Description,
+		ProductImages: data.ProductImage,
+	}
+}
+
+func GetAllProductResp(data []product.Core) []GetAllResp {
+	res := []GetAllResp{}
+	for _, v := range data {
+		res = append(res, ToResp(v))
+	}
+	return res
+}

@@ -79,6 +79,10 @@ func (uuc *userUseCase) Profile(token interface{}) (interface{}, error) {
 
 func (uuc *userUseCase) Update(token interface{}, fileData multipart.FileHeader, updateData user.Core) (user.Core, error) {
 	id := helper.ExtractToken(token)
+	if updateData.Password != "" {
+		hashed, _ := helper.GeneratePassword(updateData.Password)
+		updateData.Password = string(hashed)
+	}
 	if fileData.Size != 0 {
 		if fileData.Size > 500000 {
 			return user.Core{}, errors.New("size error")

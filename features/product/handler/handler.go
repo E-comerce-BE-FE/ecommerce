@@ -73,8 +73,8 @@ func (hc *handlerController) AllProduct() echo.HandlerFunc {
 		// 	result = append(result, AllContentResponse(res[i]))
 		// }
 		return c.JSON(http.StatusOK, map[string]interface{}{
-			"data":    res,
-			"message": "success",
+			"data":    GetAllProductResp(res),
+			"message": "success show all product",
 		})
 	}
 }

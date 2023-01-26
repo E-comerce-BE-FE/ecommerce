@@ -13,6 +13,20 @@ type TransactionService struct {
 	mock.Mock
 }
 
+// CancelTransaction provides a mock function with given fields: token, transactionID
+func (_m *TransactionService) CancelTransaction(token interface{}, transactionID uint) error {
+	ret := _m.Called(token, transactionID)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(interface{}, uint) error); ok {
+		r0 = rf(token, transactionID)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // CreateTransaction provides a mock function with given fields: token, paymentLink, codeTrans
 func (_m *TransactionService) CreateTransaction(token interface{}, paymentLink string, codeTrans string) (transaction.Core, error) {
 	ret := _m.Called(token, paymentLink, codeTrans)
@@ -27,6 +41,29 @@ func (_m *TransactionService) CreateTransaction(token interface{}, paymentLink s
 	var r1 error
 	if rf, ok := ret.Get(1).(func(interface{}, string, string) error); ok {
 		r1 = rf(token, paymentLink, codeTrans)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// TransactionDetail provides a mock function with given fields: token, transactionID
+func (_m *TransactionService) TransactionDetail(token interface{}, transactionID uint) (interface{}, error) {
+	ret := _m.Called(token, transactionID)
+
+	var r0 interface{}
+	if rf, ok := ret.Get(0).(func(interface{}, uint) interface{}); ok {
+		r0 = rf(token, transactionID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(interface{})
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(interface{}, uint) error); ok {
+		r1 = rf(token, transactionID)
 	} else {
 		r1 = ret.Error(1)
 	}

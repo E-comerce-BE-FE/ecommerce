@@ -3,14 +3,14 @@ package transaction
 import "github.com/labstack/echo/v4"
 
 type Core struct {
-	ID              uint
-	TotalProduct    int
-	SubTotal        int
-	TransactionDate string
-	Status          string
-	TransactionName string
-	TransactionCode string
-	PaymentLink     string
+	ID              uint   `json:"transaction_id"`
+	TotalProduct    int    `json:"total_product"`
+	SubTotal        int    `json:"sub_total"`
+	TransactionDate string `json:"create_at"`
+	Status          string `json:"status"`
+	TransactionName string `json:"transaction_name"`
+	TransactionCode string `json:"transaction_code"`
+	PaymentLink     string `json:"payment_link"`
 }
 
 type TransactionHandler interface {

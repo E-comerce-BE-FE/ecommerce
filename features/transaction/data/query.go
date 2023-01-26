@@ -48,11 +48,17 @@ func (tq *transactionQuery) CreateTransaction(userID uint, paymentLink string, c
 		log.Println("query error", err.Error())
 		return transaction.Core{}, errors.New("server error")
 	}
+	trsData := Transaction{}
+	err = tq.db.Where("transaction_code = ?", codeTrans).First(&trsData).Error
+	if err != nil {
+		log.Println("query error", err.Error())
+		return transaction.Core{}, errors.New("server error")
+	}
 	//copy cart ke transaksi item
 	temp := []TransactionItem{}
 	for i := 0; i < len(cart); i++ {
 		temp = append(temp, CartToTI(cart[i]))
-		temp[i].TransactionID = trs.ID
+		temp[i].TransactionID = trsData.ID
 	}
 	// batch create
 	err = tq.db.Create(&temp).Error
@@ -166,7 +172,7 @@ func (tq *transactionQuery) TransactionDetail(userID uint, transactionID uint) (
 		return transaction.Core{}, errors.New("server error")
 	}
 	result := make(map[string]interface{})
-	result["id"] = trans.ID
+	result["transaction_id"] = trans.ID
 	result["total_product"] = trans.TotalProduct
 	result["subtotal"] = trans.SubTotal
 	result["transaction_date"] = fmt.Sprintf("%d-%d-%d %d:%d:%d", trans.CreatedAt.Day(), trans.CreatedAt.Month(), trans.CreatedAt.Year(), trans.CreatedAt.Hour(), trans.CreatedAt.Minute(), trans.CreatedAt.UTC().Second())

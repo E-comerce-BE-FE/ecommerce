@@ -112,6 +112,6 @@ func (uc *userControll) Delete() echo.HandlerFunc {
 			return c.JSON(PrintErrorResponse(err.Error()))
 		}
 
-		return c.JSON(PrintSuccessReponse(http.StatusOK, "success delete profile"))
+		return c.JSON(http.StatusOK, map[string]interface{}{"message": "success delete profile"})
 	}
 }
