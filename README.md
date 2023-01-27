@@ -23,6 +23,7 @@ This project used Go languange and rest api to run the application.
 - Delete user
 
 ### Product
+- Search product
 - Add product
 - Show all product
 - Show product detail
@@ -32,13 +33,16 @@ This project used Go languange and rest api to run the application.
 ### Cart
 - Add to cart
 - Show cart
+- Show cart with user
 - Edit cart
 - Delete cart
 
 ### Transaction
 - Create transactioon
 - Show transaction
-- Edit Transaction
+- Show detail transaction
+- Update transaction status
+- Cancel transaction
 
 ## ERD
 ![image](https://user-images.githubusercontent.com/119381998/214802860-95ae127d-ad14-4aa0-8658-b680c01970bf.png)
@@ -47,5 +51,5 @@ This project used Go languange and rest api to run the application.
 [Click here](https://app.swaggerhub.com/apis-docs/fauzilax/E-Commerce/1.0.0#/)
 
 ## Authors
-- Fauzi Sofyan [![GitHub](https://img.shields.io/badge/fauzi-sofyan-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/fauzilax)
-- Griffin Henry [![GitHub](https://img.shields.io/badge/griffin-henry-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/kgriffinh)
+- [![GitHub](https://img.shields.io/badge/fauzi-sofyan-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/fauzilax)
+- [![GitHub](https://img.shields.io/badge/griffin-henry-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/kgriffinh)
