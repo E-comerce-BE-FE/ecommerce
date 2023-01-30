@@ -32,7 +32,7 @@ func (tc *transactionController) CreateTransaction() echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, map[string]interface{}{"message": "wrong input format"})
 		}
 		var s = snap.Client{}
-		s.New("SB-Mid-server-nP8oOrzwnFwp8UTSeDXEhm7v", midtrans.Sandbox)
+		s.New("YOUR-SERVER-KEY", midtrans.Sandbox)
 		// Use to midtrans.Production if you want Production Environment (accept real transaction).
 		// 2. Initiate Snap request param
 		orderID := helper.GenerateRandomString()
@@ -83,7 +83,7 @@ func (tc *transactionController) UpdateTransaction() echo.HandlerFunc {
 		}
 		//get status
 		var z = coreapi.Client{}
-		z.New("SB-Mid-server-nP8oOrzwnFwp8UTSeDXEhm7v", midtrans.Sandbox)
+		z.New("YOUR-SERVER-KEY", midtrans.Sandbox)
 		cekStatus, _ := z.CheckTransaction(input.CodeTrans)
 		log.Println(cekStatus.TransactionStatus)
 		log.Println(cekStatus.StatusMessage)
