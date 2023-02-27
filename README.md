@@ -1,4 +1,4 @@
-# All Goods (E-Commerce) Project
+# ALL GOODS (E-Commerce) Project
 This project used Go languange and rest api to run the application.
 
 ## Build App & Database
